@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  /* Light mode brand palette */
+  --brand: #2642dc;
+  --brand-bg: #ededed;
+  --brand-alt: #00d4ff;
+  --brand-destructive: #ff0101;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-oswald);
+  --font-mono: var(--font-oswald);
+  /* Tailwind color tokens mapped to CSS variables */
+  --color-brand: var(--brand);
+  --color-brand-bg: var(--brand-bg);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-alt: var(--brand-alt);
+  --color-brand-dark: var(--foreground);
+  --color-brand-ash: var(--brand-ash);
+  --color-brand-destructive: var(--brand-destructive);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #181d28;
+    --foreground: #ededed;
+    --brand: #2642dc;
+    --brand-secondary: #1d2132;
+    --brand-bg: #ededed;
+    --brand-ash: #252935;
+    --brand-alt: #00d4ff;
+    --brand-destructive: #ff0101;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+@layer utilities {
+  .container {
+    @apply mx-auto px-6 xl:px-12 2xl:px-22;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
