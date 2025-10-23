@@ -2,13 +2,18 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Checkbox } from "@/components/UI/Checkbox";
 import { Button } from "@/components/UI/Button";
 import GoogleIcon from "@/components/Icons/socials/GoogleIcon";
 import MailIcon from "@/components/Icons/MailIcon";
+import LoginForm from "@/components/Auth/LoginForm";
 
 const LoginPage = () => {
-  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [showLoginForm, setShowLoginForm] = useState(false);
+
+  const handleLoginSuccess = (email: string, token: string) => {
+    console.log("Login successful:", { email, token });
+    // TODO: Handle successful login (redirect to dashboard, etc.)
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative overflow-hidden">
@@ -39,7 +44,7 @@ const LoginPage = () => {
               <p className="text-brand-bg">
                 Don&apos;t have an account?{" "}
                 <Link
-                  href="/auth/signup"
+                  href="/auth/register"
                   className="text-brand-alt hover:text-brand-alt/80 transition-colors"
                 >
                   Sign Up
@@ -48,36 +53,51 @@ const LoginPage = () => {
             </div>
 
             {/* Login Options */}
-            <div className="space-y-4 mb-8">
-              {/* Google Login */}
-              <Button
-                variant="secondary"
-                className="w-full h-12 bg-brand-ash border-brand-ash hover:bg-brand-ash/80 text-brand-bg justify-center px-4"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 flex items-center justify-center">
-                    <GoogleIcon />
+            {!showLoginForm ? (
+              <div className="space-y-4 mb-8">
+                {/* Google Login */}
+                <Button
+                  variant="secondary"
+                  className="w-full h-12 bg-brand-ash border-brand-ash hover:bg-brand-ash/80 text-brand-bg justify-center px-4"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-6 h-6 flex items-center justify-center">
+                      <GoogleIcon />
+                    </div>
+                    <span>Continue with Google</span>
                   </div>
-                  <span>Continue with Google</span>
-                </div>
-              </Button>
+                </Button>
 
-              {/* Email Login */}
-              <Button
-                variant="secondary"
-                className="w-full h-12 bg-brand-ash border-brand-ash hover:bg-brand-ash/80 text-brand-bg justify-center px-4"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 flex items-center justify-center">
-                    <MailIcon />
+                {/* Email Login */}
+                <Button
+                  onClick={() => setShowLoginForm(true)}
+                  variant="secondary"
+                  className="w-full h-12 bg-brand-ash border-brand-ash hover:bg-brand-ash/80 text-brand-bg justify-center px-4"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-6 h-6 flex items-center justify-center">
+                      <MailIcon />
+                    </div>
+                    <span>Continue with Email</span>
                   </div>
-                  <span>Continue with Email</span>
+                </Button>
+              </div>
+            ) : (
+              <div className="mb-8">
+                <LoginForm onLoginSuccess={handleLoginSuccess} />
+                <div className="mt-4 text-center">
+                  <button
+                    onClick={() => setShowLoginForm(false)}
+                    className="text-brand-alt hover:text-brand-alt/80 transition-colors"
+                  >
+                    ← Back to login options
+                  </button>
                 </div>
-              </Button>
-            </div>
+              </div>
+            )}
 
             {/* Terms and Conditions */}
-            <div className="flex items-start gap-3">
+            {/* <div className="flex items-start gap-3">
               <Checkbox
                 checked={agreeToTerms}
                 onCheckedChange={(checked) => setAgreeToTerms(checked === true)}
@@ -99,7 +119,7 @@ const LoginPage = () => {
                   Privacy policy
                 </Link>
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
