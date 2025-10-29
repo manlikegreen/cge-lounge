@@ -1,12 +1,11 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import React, { ReactNode, useRef, useState } from "react";
+import React, { ReactNode, useRef, useState, useEffect } from "react";
 import Wrapper from "../UI/Wrapper";
 import Link from "next/link";
-// import Image from "next/image";
+import { usePathname } from "next/navigation";
 import AnimationContainer from "../UI/AnimationContainer";
-// import { useClickOutside } from "@/hooks/use-click-outside";
 import { cn } from "@/lib/utils";
 // import logo from "@/assets/Logo/android-chrome-512x512.png";
 import { MdClose, MdMenu } from "react-icons/md";
@@ -24,10 +23,67 @@ interface AltNavbarProps {
 const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<{
+    firstName?: string;
+    email?: string;
+  } | null>(null);
+  const pathname = usePathname();
+
+  // Function to check if a link is active
+  const isActiveLink = (link: string) => {
+    if (link === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(link);
+  };
 
   //   const mobileMenuRef = useClickOutside(() => {
   //     if (open) setOpen(false);
   //   });
+
+  // Check authentication status on component mount
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      const token = localStorage.getItem("token");
+      const userData = localStorage.getItem("user");
+
+      if (token && userData) {
+        try {
+          const parsedUser = JSON.parse(userData);
+          console.log("Navbar - User data from localStorage:", parsedUser);
+          console.log("Navbar - Token:", token);
+          setIsAuthenticated(true);
+          setUser(parsedUser);
+        } catch (error) {
+          console.error("Error parsing user data:", error);
+          // Clear invalid data
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+        }
+      } else {
+        console.log("Navbar - No token or user data found");
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    };
+
+    checkAuthStatus();
+
+    // Listen for storage changes (for logout from other tabs)
+    window.addEventListener("storage", checkAuthStatus);
+    return () => window.removeEventListener("storage", checkAuthStatus);
+  }, []);
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsAuthenticated(false);
+    setUser(null);
+    // Redirect to home page
+    window.location.href = "/";
+  };
 
   return (
     <>
@@ -64,7 +120,18 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
 
             <div className="hidden xl:flex flex-row flex-1 absolute inset-0 items-center justify-center w-max mx-auto gap-x-2 text-muted-foreground font-medium">
               <AnimatePresence>
-                {Nav_Links.map((link, index) => (
+                {[
+                  ...Nav_Links,
+                  ...(isAuthenticated
+                    ? [
+                        {
+                          name: "Dashboard",
+                          link: "/dashboard",
+                          icon: DashboardIcon,
+                        },
+                      ]
+                    : []),
+                ].map((link, index) => (
                   <AnimationContainer
                     key={index}
                     animation="fadeDown"
@@ -73,7 +140,12 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
                     <div className="relative">
                       <Link
                         href={link.link}
-                        className="hover:text-brand transition-all duration-500 hover:bg-accent rounded-md px-4 py-2"
+                        className={cn(
+                          "transition-all duration-500 hover:bg-accent rounded-md px-4 py-2",
+                          isActiveLink(link.link)
+                            ? "text-brand-alt"
+                            : "text-muted-foreground hover:text-brand-alt"
+                        )}
                       >
                         {link.name}
                       </Link>
@@ -85,17 +157,21 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
 
             <AnimationContainer animation="fadeLeft" delay={0.1}>
               <div className="flex items-center gap-x-4">
-                {/* {user ? (
-                <Link href="/dashboard">
-                  <Button>Dashboard</Button>
-                </Link>
-              ) : ( */}
-                <Link href="/auth/login">
-                  <Button size={"lg"} variant={"secondary"}>
-                    Login
-                  </Button>
-                </Link>
-                {/* )} */}
+                {isAuthenticated ? (
+                  <div className="flex items-center gap-x-4">
+                    <div className="flex items-center gap-x-2">
+                      <span className="text-brand-bg font-medium">
+                        {user?.firstName || "User"}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <Link href="/auth/login">
+                    <Button size={"lg"} variant={"secondary"}>
+                      Login
+                    </Button>
+                  </Link>
+                )}
               </div>
             </AnimationContainer>
           </Wrapper>
@@ -137,11 +213,26 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
 
               <AnimationContainer animation="fadeLeft" delay={0.1}>
                 <div className="flex items-center justify-center gap-x-4">
-                  <Button variant={"secondary"}>
-                    <Link href="/auth/login" className="flex items-center">
-                      Get started
-                    </Link>
-                  </Button>
+                  {isAuthenticated ? (
+                    <div className="flex items-center gap-x-2">
+                      <span className="text-brand-bg font-medium text-sm">
+                        {user?.firstName || "User"}
+                      </span>
+                      <Button
+                        size={"sm"}
+                        variant={"secondary"}
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button variant={"secondary"}>
+                      <Link href="/auth/login" className="flex items-center">
+                        Get started
+                      </Link>
+                    </Button>
+                  )}
                   {open ? (
                     <MdClose
                       className="text-black text-2xl dark:text-brand-bg"
@@ -168,7 +259,18 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
                 transition={{ duration: 0.3 }}
                 className="flex mt-8 rounded-b-xl absolute top-16 inset-x-0 z-50 flex-col items-center justify-center text-center gap-2 w-full px-4 py-8 shadow-xl shadow-neutral-950 bg-brand"
               >
-                {Nav_Links.map((navItem, idx: number) => (
+                {[
+                  ...Nav_Links,
+                  ...(isAuthenticated
+                    ? [
+                        {
+                          name: "Dashboard",
+                          link: "/dashboard",
+                          icon: DashboardIcon,
+                        },
+                      ]
+                    : []),
+                ].map((navItem, idx: number) => (
                   <AnimationContainer
                     key={`link=${idx}`}
                     animation="fadeRight"
@@ -178,7 +280,12 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
                     <Link
                       href={navItem.link}
                       onClick={() => setOpen(false)}
-                      className="relative hover:text-brand-bg w-full px-4 py-1 rounded-lg"
+                      className={cn(
+                        "relative w-full px-4 py-1 rounded-lg",
+                        isActiveLink(navItem.link)
+                          ? "text-brand-bg bg-brand-alt/20"
+                          : "hover:text-brand-bg"
+                      )}
                     >
                       <motion.span>
                         <div className="flex gap-2 items-center justify-center text-center">
@@ -245,7 +352,7 @@ interface NavLink {
 
 const Nav_Links: NavLink[] = [
   { name: "Home", link: "/", icon: HomeIcon },
-  { name: "Games", link: "/games", icon: About },
+  { name: "Lounge", link: "/lounge", icon: About },
   { name: "Community", link: "/community", icon: Services },
   { name: "Events", link: "/events", icon: Contact },
   { name: "Esports", link: "/esports", icon: DashboardIcon },

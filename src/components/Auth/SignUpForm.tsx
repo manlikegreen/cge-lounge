@@ -41,7 +41,12 @@ const formSchema = z.object({
 });
 
 interface SignUpFormProps {
-  onSignupSuccess?: (email: string, token: string) => void;
+  onSignupSuccess?: (
+    email: string,
+    token: string,
+    firstName: string,
+    lastName: string
+  ) => void;
 }
 
 function SignUpForm({ onSignupSuccess }: SignUpFormProps) {
@@ -79,10 +84,23 @@ function SignUpForm({ onSignupSuccess }: SignUpFormProps) {
 
       // Handle successful signup
       console.log("Signup successful:", result);
+      console.log("User data from backend:", result.user);
+      console.log("Form values:", values);
+
+      // Extract first name from backend fullName response
+      const fullName = result.user.fullName || "";
+      const firstName = fullName.split(" ")[0] || "";
+      const lastName = fullName.split(" ").slice(1).join(" ") || "";
+
+      console.log("Extracted names from backend:", {
+        fullName,
+        firstName,
+        lastName,
+      });
 
       // Call the success callback to show OTP modal
       if (onSignupSuccess) {
-        onSignupSuccess(result.user.email, result.token);
+        onSignupSuccess(result.user.email, result.token, firstName, lastName);
       }
     } catch (error) {
       const apiError = error as ApiError;

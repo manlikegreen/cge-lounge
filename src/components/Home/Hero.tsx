@@ -106,7 +106,7 @@ export default function Hero({
     >
       <div className="mx-4 md:mx-8 lg:mx-12">
         <h3 className="text-5xl font-bold text-brand-bg mb-8">
-          Latest <span className="text-brand-alt">Update</span>
+          Latest <span className="text-brand-alt">Updates</span>
         </h3>
         <div className="pb-3 md:pb-4" />
 

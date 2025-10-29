@@ -9,10 +9,25 @@ const SignupPage = () => {
   const [showOTPModal, setShowOTPModal] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [userToken, setUserToken] = useState("");
+  const [userFirstName, setUserFirstName] = useState("");
+  const [userLastName, setUserLastName] = useState("");
 
-  const handleSignupSuccess = (email: string, token: string) => {
+  const handleSignupSuccess = (
+    email: string,
+    token: string,
+    firstName: string,
+    lastName: string
+  ) => {
+    console.log("SignupPage - handleSignupSuccess called with:");
+    console.log("email:", email);
+    console.log("token:", token);
+    console.log("firstName:", firstName);
+    console.log("lastName:", lastName);
+
     setUserEmail(email);
     setUserToken(token);
+    setUserFirstName(firstName);
+    setUserLastName(lastName);
     setShowOTPModal(true);
   };
 
@@ -68,6 +83,8 @@ const SignupPage = () => {
           onClose={handleCloseOTP}
           userEmail={userEmail}
           userToken={userToken}
+          userFirstName={userFirstName}
+          userLastName={userLastName}
         />
       )}
     </div>

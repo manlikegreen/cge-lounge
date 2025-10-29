@@ -10,9 +10,26 @@ import LoginForm from "@/components/Auth/LoginForm";
 const LoginPage = () => {
   const [showLoginForm, setShowLoginForm] = useState(false);
 
-  const handleLoginSuccess = (email: string, token: string) => {
-    console.log("Login successful:", { email, token });
-    // TODO: Handle successful login (redirect to dashboard, etc.)
+  const handleLoginSuccess = (
+    email: string,
+    token: string,
+    firstName: string
+  ) => {
+    console.log("Login successful:", { email, token, firstName });
+
+    // Store user data and token using the firstName from backend
+    const userData = {
+      email: email,
+      firstName: firstName,
+    };
+
+    console.log("Storing user data:", userData);
+
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", token);
+
+    // Redirect to dashboard
+    window.location.href = "/dashboard";
   };
 
   return (
@@ -37,7 +54,7 @@ const LoginPage = () => {
           {/* Login Modal */}
           <div className="bg-brand-secondary backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-gray-700/50">
             {/* Header */}
-            <div className="text-center mb-8">
+            <div className="text-center mb-14">
               <h1 className="text-3xl font-bold text-white mb-2">
                 Welcome back, gamer.
               </h1>
@@ -57,8 +74,8 @@ const LoginPage = () => {
               <div className="space-y-4 mb-8">
                 {/* Google Login */}
                 <Button
-                  variant="secondary"
-                  className="w-full h-12 bg-brand-ash border-brand-ash hover:bg-brand-ash/80 text-brand-bg justify-center px-4"
+                  variant="default"
+                  className="w-full h-12 bg-[#232b3b] border-[#232b3b] hover:bg-[#232b3b]/80 text-brand-bg justify-center px-4"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 flex items-center justify-center">
@@ -71,8 +88,8 @@ const LoginPage = () => {
                 {/* Email Login */}
                 <Button
                   onClick={() => setShowLoginForm(true)}
-                  variant="secondary"
-                  className="w-full h-12 bg-brand-ash border-brand-ash hover:bg-brand-ash/80 text-brand-bg justify-center px-4"
+                  variant="default"
+                  className="w-full h-12 bg-[#232b3b] border-[#232b3b] hover:bg-[#232b3b]/80 text-brand-bg justify-center px-4"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 flex items-center justify-center">

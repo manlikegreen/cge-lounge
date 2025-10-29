@@ -33,7 +33,7 @@ const formSchema = z.object({
 });
 
 interface LoginFormProps {
-  onLoginSuccess?: (email: string, token: string) => void;
+  onLoginSuccess?: (email: string, token: string, firstName: string) => void;
 }
 
 function LoginForm({ onLoginSuccess }: LoginFormProps) {
@@ -62,10 +62,17 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
 
       // Handle successful login
       console.log("Login successful:", result);
+      console.log("User data from backend:", result.user);
+
+      // Extract first name from backend fullName response
+      const fullName = result.user.fullName || "";
+      const firstName = fullName.split(" ")[0] || "";
+
+      console.log("Extracted firstName from backend:", firstName);
 
       // Call the success callback
       if (onLoginSuccess) {
-        onLoginSuccess(result.user.email, result.access_token);
+        onLoginSuccess(result.user.email, result.access_token, firstName);
       }
     } catch (error) {
       const apiError = error as ApiError;

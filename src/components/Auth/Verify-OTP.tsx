@@ -11,6 +11,8 @@ interface VerifyOTPProps {
   onClose: () => void;
   userEmail: string;
   userToken: string;
+  userFirstName?: string;
+  userLastName?: string;
 }
 
 export default function VerifyOTP({
@@ -18,6 +20,8 @@ export default function VerifyOTP({
   onClose,
   userEmail,
   userToken,
+  userFirstName,
+  userLastName,
 }: VerifyOTPProps) {
   const [otpInputs, setOtpInputs] = useState(["", "", "", ""]);
   const [timeLeft, setTimeLeft] = useState(900); // 15 minutes
@@ -166,17 +170,25 @@ export default function VerifyOTP({
 
       // If we get here, the OTP was verified successfully
       // Store the user data and token from the original signup
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          email: userEmail,
-          // Add other user data as needed
-        })
-      );
+      console.log("VerifyOTP - User data being stored:");
+      console.log("userEmail:", userEmail);
+      console.log("userFirstName:", userFirstName);
+      console.log("userLastName:", userLastName);
+
+      const userData = {
+        email: userEmail,
+        firstName: userFirstName || userEmail.split("@")[0], // Use actual firstName or fallback to email
+        lastName: userLastName,
+        // Add other user data as needed
+      };
+
+      console.log("Final user data to store:", userData);
+
+      localStorage.setItem("user", JSON.stringify(userData));
       localStorage.setItem("token", userToken);
 
-      // Redirect to home page
-      window.location.href = "/";
+      // Redirect to dashboard
+      window.location.href = "/dashboard";
     } catch (error) {
       const apiError = error as ApiError;
       setError(apiError.message || "Failed to verify OTP. Please try again.");
