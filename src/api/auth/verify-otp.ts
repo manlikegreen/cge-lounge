@@ -9,7 +9,8 @@ export interface VerifyOTPRequest {
 export interface VerifyOTPResponse {
   message: string;
   error?: string;
-  statusCode: number;
+  statusCode?: number;
+  success?: boolean;
 }
 
 export interface ApiError {

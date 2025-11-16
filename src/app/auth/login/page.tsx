@@ -6,6 +6,7 @@ import { Button } from "@/components/UI/Button";
 import GoogleIcon from "@/components/Icons/socials/GoogleIcon";
 import MailIcon from "@/components/Icons/MailIcon";
 import LoginForm from "@/components/Auth/LoginForm";
+import ApiClient from "@/lib/ApiClient";
 
 const LoginPage = () => {
   const [showLoginForm, setShowLoginForm] = useState(false);
@@ -27,6 +28,11 @@ const LoginPage = () => {
 
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", token);
+
+    // Also set token in ApiClient
+    const apiClient = ApiClient.getInstance();
+    apiClient.setAccessToken(token);
+    console.log("✅ Access token set in ApiClient");
 
     // Redirect to dashboard
     window.location.href = "/dashboard";

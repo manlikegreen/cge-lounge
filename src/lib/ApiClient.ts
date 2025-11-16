@@ -29,12 +29,24 @@ class ApiClient {
   }
 
   public setAccessToken(token: string): void {
-    console.log("Setting access token:", token);
-    this.headers["Authorization"] = `Bearer ${token}`;
+    // Ensure token is a string and trim whitespace
+    const cleanToken =
+      typeof token === "string" ? token.trim() : String(token).trim();
+
+    if (!cleanToken) {
+      return;
+    }
+
+    // Check if token is already formatted with "Bearer "
+    const formattedToken = cleanToken.startsWith("Bearer ")
+      ? cleanToken
+      : `Bearer ${cleanToken}`;
+
+    this.headers["Authorization"] = formattedToken;
 
     // Store in both localStorage and cookies
-    localStorage.setItem("token", token);
-    this.setCookie("access_token", token, 7); // 7 days expiry
+    localStorage.setItem("token", cleanToken);
+    this.setCookie("access_token", cleanToken, 7); // 7 days expiry
   }
 
   public removeAccessToken(): void {
@@ -65,44 +77,39 @@ class ApiClient {
   }
 
   private handleUnauthorized(): void {
-    console.log("🔐 Starting unauthorized access handling");
-
-    console.log("🧹 Clearing session data");
     // Clear session data
     this.removeAccessToken();
     localStorage.removeItem("user");
 
-    console.log("🔄 Initiating redirect to /auth/login");
-    // Redirect to login
-    if (this.router) {
-      this.router.push("/auth/login");
-    } else {
+    // Redirect to login page silently (using window.location for reliability)
+    if (typeof window !== "undefined") {
       window.location.href = "/auth/login";
     }
-    console.log("✅ Unauthorized handling complete");
   }
 
   public initializeWithToken(): void {
-    // First try to get token from cookie
-    let accessToken = this.getCookie("access_token");
+    let accessToken: string | null = null;
 
-    // If no token in cookie, try localStorage as fallback
-    if (!accessToken) {
-      accessToken = localStorage.getItem("token");
-      if (accessToken) {
-        console.log("Access token found in localStorage (fallback)");
-      }
-    }
-
+    // FIRST: Check localStorage (where token is stored after OTP verification)
+    accessToken = localStorage.getItem("token");
     if (accessToken) {
-      console.log("Access token found in cookie");
       this.setAccessToken(accessToken);
       return;
     }
 
-    // If no token found anywhere, remove any existing token
-    console.log("No access token found in cookie or localStorage");
-    this.removeAccessToken();
+    // SECOND: Try to get token from cookies (check multiple possible cookie names)
+    const cookieNames = ["access_token", "session.token", "token"];
+    for (const cookieName of cookieNames) {
+      const cookieToken = this.getCookie(cookieName);
+      if (cookieToken) {
+        accessToken = cookieToken;
+        break;
+      }
+    }
+
+    if (accessToken) {
+      this.setAccessToken(accessToken);
+    }
   }
 
   private getErrorMessage(status: number, message?: string): string {
@@ -136,16 +143,16 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    console.log("🚀 Starting API request to:", endpoint);
     // Initialize token before each request
     this.initializeWithToken();
 
     const url = `${this.baseURL}${endpoint}`;
-    console.log("📡 Request URL:", url);
-    console.log("🔑 Current headers:", this.headers);
 
+    // JWT tokens are sent in Authorization header, so we don't need credentials
+    // Only use credentials if explicitly needed (for cookie-based auth)
     const config: RequestInit = {
       ...options,
+      credentials: options.credentials || "same-origin",
       headers: {
         ...this.headers,
         ...(options.headers || {}),
@@ -153,19 +160,31 @@ class ApiClient {
     };
 
     try {
-      console.log("📤 Sending request with config:", config);
       const response = await fetch(url, config);
-      console.log("📥 Received response status:", response.status);
 
-      const data = await response.json();
-      console.log("📦 Response data:", data);
+      // Check content type to handle both JSON and plain text responses
+      const contentType = response.headers.get("content-type");
+      let data: unknown;
+
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        // Handle plain text or other content types
+        const textData = await response.text();
+        // Try to parse as JSON if possible, otherwise return as text
+        try {
+          data = JSON.parse(textData);
+        } catch {
+          // If not JSON, return a success object for plain text success messages
+          data = { message: textData, success: true };
+        }
+      }
 
       if (!response.ok) {
-        console.log("❌ Request failed with status:", response.status);
-
-        // Handle authentication errors
+        // Handle authentication errors - only for real HTTP 401 responses
         if (response.status === 401) {
-          console.log("🔒 Unauthorized access detected");
+          // This is a real 401 response from the server
+          // Clear session data and redirect to login
           this.handleUnauthorized();
           return Promise.reject(
             new Error("Your session has expired. Please sign in again.")
@@ -175,16 +194,39 @@ class ApiClient {
         // Handle other errors with specific messages
         const errorMessage = this.getErrorMessage(
           response.status,
-          data.message
+          (data as { message?: string })?.message
         );
-        console.log("❌ Error:", errorMessage);
         throw new Error(errorMessage);
       }
 
-      console.log("✅ Request successful");
       return data as T;
     } catch (error) {
-      console.log("💥 Error caught in request:", error);
+      // Check if it's a network error (not a real HTTP response)
+      if (
+        error instanceof TypeError &&
+        (error.message.includes("fetch") ||
+          error.message.includes("Failed to fetch") ||
+          error.message.includes("NetworkError") ||
+          error.message.includes("Network request failed"))
+      ) {
+        // This is a network error, not a real 401
+        // Don't clear session data, just throw the error
+        throw new Error(
+          "Network error. Please check your connection and try again."
+        );
+      }
+
+      // Check if it's a CORS error
+      if (
+        error instanceof TypeError &&
+        (error.message.includes("CORS") || error.message.includes("blocked"))
+      ) {
+        throw new Error(
+          "CORS error. Please contact the backend team to fix CORS configuration."
+        );
+      }
+
+      // Re-throw other errors as-is
       if (error instanceof Error) {
         throw error;
       }

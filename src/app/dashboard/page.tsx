@@ -6,7 +6,7 @@ import NewsUpdates from "@/components/Home/NewsUpdates";
 
 const Dashboard = () => {
   return (
-    <div className="mt-[10rem]">
+    <div className="mt-[7rem] lg:mt-[10rem]">
       <Stats />
       <Leaderboards />
       <UpcomingEvents />

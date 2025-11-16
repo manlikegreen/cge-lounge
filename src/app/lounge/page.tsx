@@ -7,7 +7,7 @@ import LoungeGallery from "@/components/Lounge/LoungeGallery";
 
 const LoungePage = () => {
   return (
-    <div className="mt-[10rem]">
+    <div className="">
       <LoungeHero />
       <GamingEquipment />
       <FacilityAmenities />

@@ -24,7 +24,7 @@ const ESportsLeaderboard: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   return (
-    <div className="mt-[10rem]">
+    <div className="mt-[7rem] lg:mt-[10rem]">
       {/* Header Section */}
       <section className="w-full py-10 bg-background">
         <div className="container mx-auto px-6">

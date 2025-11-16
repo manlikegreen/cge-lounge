@@ -213,32 +213,34 @@ const RankingsTable: React.FC<RankingsProps> = ({ selectedCategory }) => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4"
+          className="flex flex-col xl:flex-row justify-between items-center mb-8 gap-4"
         >
-          <h2 className="text-4xl font-bold text-white">Full Rankings</h2>
+          <h2 className="text-2xl xl:text-4xl font-bold text-white">
+            Full Rankings
+          </h2>
 
-          <div className="flex items-center gap-4">
-            <div className="relative">
+          <div className="flex items-center gap-4 w-full xl:w-auto">
+            <div className="relative flex-1 xl:flex-none">
               <input
                 type="text"
                 placeholder="Search Players"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-brand-alt focus:outline-none w-48"
+                className="bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:border-brand-alt focus:outline-none w-full xl:w-48"
               />
             </div>
-            <button className="bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-2 text-gray-300 hover:border-brand-alt hover:text-brand-alt transition-colors">
+            <button className="bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-2 text-gray-300 hover:border-brand-alt hover:text-brand-alt transition-colors whitespace-nowrap">
               Filters
             </button>
           </div>
         </motion.div>
 
-        {/* Rankings Table */}
+        {/* Rankings Table - Desktop (xl and above, > 1024px) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-gray-800/30 rounded-xl border border-gray-700/50 overflow-hidden"
+          className="hidden xl:block bg-gray-800/30 rounded-xl border border-gray-700/50 overflow-hidden"
         >
           {/* Table Header */}
           <div className="bg-gray-800/50 px-6 py-4 border-b border-gray-700/50">
@@ -315,6 +317,96 @@ const RankingsTable: React.FC<RankingsProps> = ({ selectedCategory }) => {
               </motion.div>
             ))}
           </div>
+        </motion.div>
+
+        {/* Rankings Cards - Mobile, Tablet, and screens ≤ 1024px */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="xl:hidden space-y-4"
+        >
+          {paginatedPlayers.map((player, index) => (
+            <motion.div
+              key={player.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className="bg-gray-800/30 rounded-xl border border-gray-700/50 p-4 hover:bg-gray-800/40 transition-colors"
+            >
+              {/* Card Header - Rank and Player Info */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  {/* Rank */}
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-white text-lg">
+                      #{player.rank}
+                    </span>
+                    <span
+                      className={cn(
+                        "text-sm",
+                        getRankChangeColor(player.rankChange)
+                      )}
+                    >
+                      {getRankChangeIcon(player.rankChange)}
+                    </span>
+                  </div>
+
+                  {/* Player Avatar */}
+                  <div
+                    className={cn(
+                      "w-12 h-12 rounded-full flex items-center justify-center text-xl",
+                      player.avatar.background
+                    )}
+                  >
+                    {player.avatar.character}
+                  </div>
+
+                  {/* Player Name and Team */}
+                  <div>
+                    <div className="font-medium text-brand-alt text-base">
+                      {player.name}
+                    </div>
+                    <div className="text-xs text-gray-400">{player.team}</div>
+                  </div>
+                </div>
+
+                {/* Score - Prominent on Mobile */}
+                <div className="text-right">
+                  <div className="text-xs text-gray-400 mb-1">Score</div>
+                  <div className="font-bold text-orange-400 text-lg">
+                    {player.score.toLocaleString()}
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-700/50">
+                <div>
+                  <div className="text-xs text-gray-400 mb-1">Wins</div>
+                  <div className="text-white font-semibold">{player.wins}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-400 mb-1">K/D Ratio</div>
+                  <div className="text-white font-semibold">
+                    {player.kdRatio}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-400 mb-1">Win Rate</div>
+                  <div className="text-white font-semibold">
+                    {player.winRate}%
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-400 mb-1">Streak</div>
+                  <div className="text-white font-semibold">
+                    {player.streak}W
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
 
         {/* Pagination */}

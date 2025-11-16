@@ -22,7 +22,7 @@ const LoungeHero: React.FC = () => {
             repeat: Infinity,
             ease: "linear",
           }}
-          className="absolute top-20 left-10 w-32 h-32 bg-brand-alt/10 rounded-full blur-xl"
+          className="absolute top-40 left-10 w-32 h-32 bg-brand-alt/10 rounded-full blur-xl"
         />
         <motion.div
           animate={{
@@ -34,7 +34,7 @@ const LoungeHero: React.FC = () => {
             repeat: Infinity,
             ease: "linear",
           }}
-          className="absolute bottom-20 right-10 w-40 h-40 bg-brand/10 rounded-full blur-xl"
+          className="absolute bottom-40 right-10 w-40 h-40 bg-brand/10 rounded-full blur-xl"
         />
       </div>
 
@@ -47,7 +47,7 @@ const LoungeHero: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="mb-8"
           >
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-6">
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-6 mt-[8rem] lg:mt-[9rem]">
               <span className="text-white">CGE </span>
               <span className="text-brand-alt">Lounge</span>
             </h1>

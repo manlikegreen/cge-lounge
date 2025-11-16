@@ -15,6 +15,8 @@ import About from "../Icons/About";
 import Services from "../Icons/Services";
 import Contact from "../Icons/Contact";
 import DashboardIcon from "../Icons/DashboardIcon";
+import UserProfile from "../Profile/UserProfile";
+import ApiClient from "@/lib/ApiClient";
 
 interface AltNavbarProps {
   children?: ReactNode;
@@ -77,12 +79,15 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
 
   // Logout function
   const handleLogout = () => {
+    // Clear all session data including cookies
+    const apiClient = ApiClient.getInstance();
+    apiClient.removeAccessToken();
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setIsAuthenticated(false);
     setUser(null);
-    // Redirect to home page
-    window.location.href = "/";
+    // Redirect to login page
+    window.location.href = "/auth/login";
   };
 
   return (
@@ -158,12 +163,11 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
             <AnimationContainer animation="fadeLeft" delay={0.1}>
               <div className="flex items-center gap-x-4">
                 {isAuthenticated ? (
-                  <div className="flex items-center gap-x-4">
-                    <div className="flex items-center gap-x-2">
-                      <span className="text-brand-bg font-medium">
-                        {user?.firstName || "User"}
-                      </span>
-                    </div>
+                  <div className="flex items-center gap-x-3">
+                    <span className="text-brand-bg font-medium">
+                      {user?.firstName || "User"}
+                    </span>
+                    <UserProfile onLogout={handleLogout} />
                   </div>
                 ) : (
                   <Link href="/auth/login">
@@ -218,13 +222,7 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
                       <span className="text-brand-bg font-medium text-sm">
                         {user?.firstName || "User"}
                       </span>
-                      <Button
-                        size={"sm"}
-                        variant={"secondary"}
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </Button>
+                      <UserProfile onLogout={handleLogout} />
                     </div>
                   ) : (
                     <Button variant={"secondary"}>

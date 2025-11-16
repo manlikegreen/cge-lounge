@@ -98,9 +98,13 @@ function SignUpForm({ onSignupSuccess }: SignUpFormProps) {
         lastName,
       });
 
+      // Token is now extracted from response headers and stored in signup.ts
+      // Just pass the token from result (if available) for the callback
+      const accessToken = result.access_token || "";
+
       // Call the success callback to show OTP modal
       if (onSignupSuccess) {
-        onSignupSuccess(result.user.email, result.token, firstName, lastName);
+        onSignupSuccess(result.user.email, accessToken, firstName, lastName);
       }
     } catch (error) {
       const apiError = error as ApiError;
