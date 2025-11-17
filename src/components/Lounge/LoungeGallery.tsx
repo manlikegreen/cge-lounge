@@ -4,18 +4,18 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Images,
-  Gamepad2,
-  Glasses,
+  GameController,
+  EyeSlash,
   Trophy,
-  Home,
+  House,
   Target,
   Laptop,
   Joystick,
   Users,
   Camera,
-  Search,
+  MagnifyingGlass,
   X,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
 interface GalleryImage {
@@ -88,10 +88,10 @@ const galleryImages: GalleryImage[] = [
 
 const categories = [
   { id: "all", name: "All", icon: Images },
-  { id: "gaming", name: "Gaming", icon: Gamepad2 },
-  { id: "vr", name: "VR", icon: Glasses },
+  { id: "gaming", name: "Gaming", icon: GameController },
+  { id: "vr", name: "VR", icon: EyeSlash },
   { id: "tournament", name: "Tournaments", icon: Trophy },
-  { id: "interior", name: "Interior", icon: Home },
+  { id: "interior", name: "Interior", icon: House },
   { id: "console", name: "Console", icon: Target },
   { id: "pc", name: "PC", icon: Laptop },
   { id: "arcade", name: "Arcade", icon: Joystick },
@@ -125,7 +125,7 @@ const GalleryImageCard: React.FC<{
         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
           <div className="text-center text-white">
             <div className="flex justify-center mb-2">
-              <Search className="w-8 h-8" />
+              <MagnifyingGlass className="w-8 h-8" />
             </div>
             <div className="text-sm font-medium">Click to view</div>
           </div>

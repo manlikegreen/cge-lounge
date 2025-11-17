@@ -2,7 +2,15 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
+
+// Generate DiceBear avatar URL from player name
+const getAvatarUrl = (playerName: string) => {
+  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(
+    playerName
+  )}`;
+};
 
 // Player data interface
 interface Player {
@@ -14,7 +22,7 @@ interface Player {
   winRate: number;
   avatar: {
     background: string;
-    character: string;
+    avatarUrl: string;
   };
 }
 
@@ -29,7 +37,7 @@ const mockPlayers: Player[] = [
     winRate: 98,
     avatar: {
       background: "bg-blue-200",
-      character: "👩‍💻",
+      avatarUrl: getAvatarUrl("CyberNinja_X"),
     },
   },
   {
@@ -41,7 +49,7 @@ const mockPlayers: Player[] = [
     winRate: 98,
     avatar: {
       background: "bg-purple-200",
-      character: "👨‍💼",
+      avatarUrl: getAvatarUrl("QuantumStrike"),
     },
   },
   {
@@ -53,7 +61,7 @@ const mockPlayers: Player[] = [
     winRate: 98,
     avatar: {
       background: "bg-yellow-200",
-      character: "👨‍🎮",
+      avatarUrl: getAvatarUrl("VoidHunter92"),
     },
   },
 ];
@@ -103,11 +111,19 @@ const PlayerCard: React.FC<{ player: Player; index: number }> = ({
       <div className="flex justify-center mb-4">
         <div
           className={cn(
-            "w-20 h-20 rounded-full flex items-center justify-center text-4xl",
+            "w-20 h-20 rounded-full flex items-center justify-center overflow-hidden p-1",
             player.avatar.background
           )}
         >
-          {player.avatar.character}
+          <div className="relative w-full h-full rounded-full overflow-hidden">
+            <Image
+              src={player.avatar.avatarUrl}
+              alt={player.name}
+              fill
+              className="object-cover"
+              unoptimized
+            />
+          </div>
         </div>
       </div>
 

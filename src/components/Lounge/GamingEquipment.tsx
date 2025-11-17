@@ -3,13 +3,13 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  Gamepad2,
+  GameController,
   Target,
-  Glasses,
+  EyeSlash,
   Laptop,
   Joystick,
-  Sparkles,
-} from "lucide-react";
+  Sparkle,
+} from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
 interface GamingEquipment {
@@ -26,7 +26,7 @@ const gamingEquipment: GamingEquipment[] = [
     id: "1",
     name: "PlayStation 5",
     description: "Experience next-gen gaming with the latest PS5 consoles",
-    icon: Gamepad2,
+    icon: GameController,
     features: [
       "4K Gaming",
       "Ray Tracing",
@@ -47,7 +47,7 @@ const gamingEquipment: GamingEquipment[] = [
     id: "3",
     name: "VR Gaming Setup",
     description: "Immersive virtual reality experiences with Meta Quest",
-    icon: Glasses,
+    icon: EyeSlash,
     features: ["Wireless VR", "Hand Tracking", "Room Scale", "Multiplayer VR"],
     category: "vr",
   },
@@ -76,7 +76,7 @@ const gamingEquipment: GamingEquipment[] = [
     id: "6",
     name: "Nintendo Switch",
     description: "Portable gaming with family-friendly titles",
-    icon: Sparkles,
+    icon: Sparkle,
     features: ["Mario Games", "Zelda Series", "Multiplayer", "Portable Mode"],
     category: "console",
   },

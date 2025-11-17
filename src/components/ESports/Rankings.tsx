@@ -2,17 +2,8 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  Sparkles,
-  Zap,
-  Star,
-  Flame,
-  User,
-  Snowflake,
-  ChevronUp,
-  ChevronDown,
-  ChevronRight,
-} from "lucide-react";
+import Image from "next/image";
+import { CaretUp, CaretDown, CaretRight } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
 interface Player {
@@ -20,10 +11,7 @@ interface Player {
   rank: number;
   name: string;
   team: string;
-  avatar: {
-    background: string;
-    icon: React.ComponentType<{ className?: string }>;
-  };
+  avatarUrl: string;
   score: number;
   wins: number;
   kdRatio: number;
@@ -36,6 +24,13 @@ interface RankingsProps {
   selectedCategory: string;
 }
 
+// Generate DiceBear avatar URL from player name
+const getAvatarUrl = (playerName: string) => {
+  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(
+    playerName
+  )}`;
+};
+
 // Mock data for different game categories
 const getPlayersByCategory = (category: string): Player[] => {
   const basePlayers: Player[] = [
@@ -44,7 +39,7 @@ const getPlayersByCategory = (category: string): Player[] => {
       rank: 1,
       name: "ShadowReaper",
       team: "Team Velocity",
-      avatar: { background: "bg-purple-200", icon: Sparkles },
+      avatarUrl: getAvatarUrl("ShadowReaper"),
       score: 15847,
       wins: 89,
       kdRatio: 3.42,
@@ -57,7 +52,7 @@ const getPlayersByCategory = (category: string): Player[] => {
       rank: 2,
       name: "QuantumStrike",
       team: "Team Nexus",
-      avatar: { background: "bg-yellow-200", icon: Zap },
+      avatarUrl: getAvatarUrl("QuantumStrike"),
       score: 14923,
       wins: 87,
       kdRatio: 3.28,
@@ -70,7 +65,7 @@ const getPlayersByCategory = (category: string): Player[] => {
       rank: 3,
       name: "VoidHunter92",
       team: "Team Apex",
-      avatar: { background: "bg-purple-200", icon: Star },
+      avatarUrl: getAvatarUrl("VoidHunter92"),
       score: 13756,
       wins: 82,
       kdRatio: 2.95,
@@ -83,7 +78,7 @@ const getPlayersByCategory = (category: string): Player[] => {
       rank: 4,
       name: "NeonBlaze",
       team: "Team Storm",
-      avatar: { background: "bg-cyan-200", icon: Flame },
+      avatarUrl: getAvatarUrl("NeonBlaze"),
       score: 12984,
       wins: 78,
       kdRatio: 2.87,
@@ -96,7 +91,7 @@ const getPlayersByCategory = (category: string): Player[] => {
       rank: 5,
       name: "CyberNinja_X",
       team: "Team Velocity",
-      avatar: { background: "bg-blue-200", icon: User },
+      avatarUrl: getAvatarUrl("CyberNinja_X"),
       score: 12456,
       wins: 75,
       kdRatio: 2.73,
@@ -109,7 +104,7 @@ const getPlayersByCategory = (category: string): Player[] => {
       rank: 6,
       name: "ThunderBolt",
       team: "Team Lightning",
-      avatar: { background: "bg-orange-200", icon: Zap },
+      avatarUrl: getAvatarUrl("ThunderBolt"),
       score: 11892,
       wins: 72,
       kdRatio: 2.65,
@@ -122,7 +117,7 @@ const getPlayersByCategory = (category: string): Player[] => {
       rank: 7,
       name: "FrostByte",
       team: "Team Ice",
-      avatar: { background: "bg-blue-200", icon: Snowflake },
+      avatarUrl: getAvatarUrl("FrostByte"),
       score: 11234,
       wins: 68,
       kdRatio: 2.58,
@@ -135,7 +130,7 @@ const getPlayersByCategory = (category: string): Player[] => {
       rank: 8,
       name: "PhoenixRise",
       team: "Team Fire",
-      avatar: { background: "bg-red-200", icon: Flame },
+      avatarUrl: getAvatarUrl("PhoenixRise"),
       score: 10876,
       wins: 65,
       kdRatio: 2.45,
@@ -198,11 +193,11 @@ const RankingsTable: React.FC<RankingsProps> = ({ selectedCategory }) => {
   const getRankChangeIcon = (change: string) => {
     switch (change) {
       case "up":
-        return ChevronUp;
+        return CaretUp;
       case "down":
-        return ChevronDown;
+        return CaretDown;
       default:
-        return ChevronRight;
+        return CaretRight;
     }
   };
 
@@ -297,13 +292,14 @@ const RankingsTable: React.FC<RankingsProps> = ({ selectedCategory }) => {
 
                   {/* Player */}
                   <div className="flex items-center gap-3">
-                    <div
-                      className={cn(
-                        "w-10 h-10 rounded-full flex items-center justify-center",
-                        player.avatar.background
-                      )}
-                    >
-                      <player.avatar.icon className="w-6 h-6 text-gray-700" />
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                      <Image
+                        src={player.avatarUrl}
+                        alt={player.name}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
                     </div>
                     <div>
                       <div className="font-medium text-brand-alt">
@@ -374,13 +370,14 @@ const RankingsTable: React.FC<RankingsProps> = ({ selectedCategory }) => {
                   </div>
 
                   {/* Player Avatar */}
-                  <div
-                    className={cn(
-                      "w-12 h-12 rounded-full flex items-center justify-center",
-                      player.avatar.background
-                    )}
-                  >
-                    <player.avatar.icon className="w-7 h-7 text-gray-700" />
+                  <div className="relative w-12 h-12 rounded-full overflow-hidden">
+                    <Image
+                      src={player.avatarUrl}
+                      alt={player.name}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
                   </div>
 
                   {/* Player Name and Team */}

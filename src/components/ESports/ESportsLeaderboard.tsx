@@ -2,7 +2,14 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Gamepad2, Crosshair, Car, Crown, Zap, Clock } from "lucide-react";
+import {
+  GameController,
+  Crosshair,
+  Car,
+  Crown,
+  Lightning,
+  Clock,
+} from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import Leaderboards from "../Dashboard/Leaderboards";
 import RankingsTable from "./Rankings";
@@ -14,11 +21,11 @@ interface GameCategory {
 }
 
 const gameCategories: GameCategory[] = [
-  { id: "all", name: "All Games", icon: Gamepad2 },
+  { id: "all", name: "All Games", icon: GameController },
   { id: "fps", name: "FPS Arena", icon: Crosshair },
   { id: "racing", name: "Racing", icon: Car },
   { id: "strategy", name: "Strategy", icon: Crown },
-  { id: "fighting", name: "Fighting", icon: Zap },
+  { id: "fighting", name: "Fighting", icon: Lightning },
 ];
 
 const ESportsLeaderboard: React.FC = () => {

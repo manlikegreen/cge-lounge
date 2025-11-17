@@ -3,13 +3,13 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  Gamepad2,
+  GameController,
   Joystick,
   Target,
   Trophy,
-  Sparkles,
-  Glasses,
-} from "lucide-react";
+  Sparkle,
+  EyeSlash,
+} from "@phosphor-icons/react";
 import { Button } from "../UI/Button";
 
 const LoungeHero: React.FC = () => {
@@ -72,11 +72,11 @@ const LoungeHero: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="flex justify-center items-center gap-8 mb-12 flex-wrap"
           >
-            <Gamepad2 className="w-12 h-12 text-brand-bg" />
+            <GameController className="w-12 h-12 text-brand-bg" />
             <Joystick className="w-12 h-12 text-brand-bg" />
             <Target className="w-12 h-12 text-brand-bg" />
             <Trophy className="w-12 h-12 text-brand-bg" />
-            <Sparkles className="w-12 h-12 text-brand-bg" />
+            <Sparkle className="w-12 h-12 text-brand-bg" />
           </motion.div>
 
           {/* Call to action */}
@@ -103,7 +103,7 @@ const LoungeHero: React.FC = () => {
           >
             <div className="text-center">
               <div className="flex justify-center mb-3">
-                <Gamepad2 className="w-10 h-10 text-brand-bg" />
+                <GameController className="w-10 h-10 text-brand-bg" />
               </div>
               <h3 className="text-xl font-bold text-brand-alt mb-2">
                 Premium Gaming
@@ -114,7 +114,7 @@ const LoungeHero: React.FC = () => {
             </div>
             <div className="text-center">
               <div className="flex justify-center mb-3">
-                <Glasses className="w-10 h-10 text-brand-bg" />
+                <EyeSlash className="w-10 h-10 text-brand-bg" />
               </div>
               <h3 className="text-xl font-bold text-brand-alt mb-2">
                 VR Experience

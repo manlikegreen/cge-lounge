@@ -4,12 +4,12 @@ import React from "react";
 import { motion } from "framer-motion";
 import {
   Armchair,
-  Wifi,
-  UtensilsCrossed,
+  WifiHigh,
+  ForkKnife,
   Trophy,
   DoorOpen,
   BookOpen,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 
 interface Amenity {
   id: string;
@@ -36,7 +36,7 @@ const amenities: Amenity[] = [
     id: "2",
     title: "High-Speed Internet",
     description: "Ultra-fast WiFi for seamless online gaming",
-    icon: Wifi,
+    icon: WifiHigh,
     features: [
       "Fiber Internet",
       "Low Latency",
@@ -48,7 +48,7 @@ const amenities: Amenity[] = [
     id: "3",
     title: "Refreshments & Snacks",
     description: "Gaming fuel to keep you going",
-    icon: UtensilsCrossed,
+    icon: ForkKnife,
     features: ["Energy Drinks", "Snacks", "Pizza Delivery", "Cold Beverages"],
   },
   {
