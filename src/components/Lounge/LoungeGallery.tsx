@@ -2,6 +2,20 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  Images,
+  Gamepad2,
+  Glasses,
+  Trophy,
+  Home,
+  Target,
+  Laptop,
+  Joystick,
+  Users,
+  Camera,
+  Search,
+  X,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface GalleryImage {
@@ -73,15 +87,15 @@ const galleryImages: GalleryImage[] = [
 ];
 
 const categories = [
-  { id: "all", name: "All", icon: "🖼️" },
-  { id: "gaming", name: "Gaming", icon: "🎮" },
-  { id: "vr", name: "VR", icon: "🥽" },
-  { id: "tournament", name: "Tournaments", icon: "🏆" },
-  { id: "interior", name: "Interior", icon: "🏠" },
-  { id: "console", name: "Console", icon: "🎯" },
-  { id: "pc", name: "PC", icon: "💻" },
-  { id: "arcade", name: "Arcade", icon: "🕹️" },
-  { id: "group", name: "Groups", icon: "👥" },
+  { id: "all", name: "All", icon: Images },
+  { id: "gaming", name: "Gaming", icon: Gamepad2 },
+  { id: "vr", name: "VR", icon: Glasses },
+  { id: "tournament", name: "Tournaments", icon: Trophy },
+  { id: "interior", name: "Interior", icon: Home },
+  { id: "console", name: "Console", icon: Target },
+  { id: "pc", name: "PC", icon: Laptop },
+  { id: "arcade", name: "Arcade", icon: Joystick },
+  { id: "group", name: "Groups", icon: Users },
 ];
 
 const GalleryImageCard: React.FC<{
@@ -100,7 +114,9 @@ const GalleryImageCard: React.FC<{
       <div className="relative overflow-hidden rounded-xl bg-gray-800">
         <div className="aspect-[4/3] bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
           <div className="text-center">
-            <div className="text-4xl mb-2">📸</div>
+            <div className="flex justify-center mb-2">
+              <Camera className="w-10 h-10 text-gray-400" />
+            </div>
             <div className="text-sm text-gray-400">{image.title}</div>
           </div>
         </div>
@@ -108,7 +124,9 @@ const GalleryImageCard: React.FC<{
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
           <div className="text-center text-white">
-            <div className="text-2xl mb-2">🔍</div>
+            <div className="flex justify-center mb-2">
+              <Search className="w-8 h-8" />
+            </div>
             <div className="text-sm font-medium">Click to view</div>
           </div>
         </div>
@@ -147,7 +165,9 @@ const Modal: React.FC<{
           <div className="bg-gray-800 rounded-xl overflow-hidden">
             <div className="aspect-video bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center">
               <div className="text-center">
-                <div className="text-6xl mb-4">📸</div>
+                <div className="flex justify-center mb-4">
+                  <Camera className="w-16 h-16 text-gray-400" />
+                </div>
                 <div className="text-xl text-gray-300">{image.title}</div>
                 <div className="text-sm text-gray-400 mt-2">{image.alt}</div>
               </div>
@@ -164,7 +184,7 @@ const Modal: React.FC<{
             onClick={onClose}
             className="absolute top-4 right-4 w-8 h-8 bg-black/50 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
           >
-            ✕
+            <X className="w-5 h-5" />
           </button>
         </motion.div>
       </motion.div>
@@ -219,7 +239,7 @@ const LoungeGallery: React.FC = () => {
                   : "bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 hover:text-brand-alt"
               )}
             >
-              <span>{category.icon}</span>
+              <category.icon className="w-5 h-5" />
               <span className="text-sm font-medium">{category.name}</span>
             </button>
           ))}

@@ -2,6 +2,14 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import {
+  Gamepad2,
+  Joystick,
+  Target,
+  Trophy,
+  Sparkles,
+  Glasses,
+} from "lucide-react";
 import { Button } from "../UI/Button";
 
 const LoungeHero: React.FC = () => {
@@ -64,11 +72,11 @@ const LoungeHero: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="flex justify-center items-center gap-8 mb-12 flex-wrap"
           >
-            <div className="text-4xl">🎮</div>
-            <div className="text-4xl">🕹️</div>
-            <div className="text-4xl">🎯</div>
-            <div className="text-4xl">🏆</div>
-            <div className="text-4xl">🎪</div>
+            <Gamepad2 className="w-12 h-12 text-brand-bg" />
+            <Joystick className="w-12 h-12 text-brand-bg" />
+            <Target className="w-12 h-12 text-brand-bg" />
+            <Trophy className="w-12 h-12 text-brand-bg" />
+            <Sparkles className="w-12 h-12 text-brand-bg" />
           </motion.div>
 
           {/* Call to action */}
@@ -94,7 +102,9 @@ const LoungeHero: React.FC = () => {
             className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8"
           >
             <div className="text-center">
-              <div className="text-3xl mb-3">🎮</div>
+              <div className="flex justify-center mb-3">
+                <Gamepad2 className="w-10 h-10 text-brand-bg" />
+              </div>
               <h3 className="text-xl font-bold text-brand-alt mb-2">
                 Premium Gaming
               </h3>
@@ -103,7 +113,9 @@ const LoungeHero: React.FC = () => {
               </p>
             </div>
             <div className="text-center">
-              <div className="text-3xl mb-3">🥽</div>
+              <div className="flex justify-center mb-3">
+                <Glasses className="w-10 h-10 text-brand-bg" />
+              </div>
               <h3 className="text-xl font-bold text-brand-alt mb-2">
                 VR Experience
               </h3>
@@ -112,7 +124,9 @@ const LoungeHero: React.FC = () => {
               </p>
             </div>
             <div className="text-center">
-              <div className="text-3xl mb-3">🏆</div>
+              <div className="flex justify-center mb-3">
+                <Trophy className="w-10 h-10 text-brand-bg" />
+              </div>
               <h3 className="text-xl font-bold text-brand-alt mb-2">
                 Tournaments
               </h3>

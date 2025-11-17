@@ -2,13 +2,21 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import {
+  Gamepad2,
+  Target,
+  Glasses,
+  Laptop,
+  Joystick,
+  Sparkles,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface GamingEquipment {
   id: string;
   name: string;
   description: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
   features: string[];
   category: "console" | "vr" | "pc" | "arcade";
 }
@@ -18,7 +26,7 @@ const gamingEquipment: GamingEquipment[] = [
     id: "1",
     name: "PlayStation 5",
     description: "Experience next-gen gaming with the latest PS5 consoles",
-    icon: "🎮",
+    icon: Gamepad2,
     features: [
       "4K Gaming",
       "Ray Tracing",
@@ -31,7 +39,7 @@ const gamingEquipment: GamingEquipment[] = [
     id: "2",
     name: "Xbox Series X",
     description: "Microsoft's most powerful console for ultimate gaming",
-    icon: "🎯",
+    icon: Target,
     features: ["4K Gaming", "120 FPS", "Quick Resume", "Game Pass"],
     category: "console",
   },
@@ -39,7 +47,7 @@ const gamingEquipment: GamingEquipment[] = [
     id: "3",
     name: "VR Gaming Setup",
     description: "Immersive virtual reality experiences with Meta Quest",
-    icon: "🥽",
+    icon: Glasses,
     features: ["Wireless VR", "Hand Tracking", "Room Scale", "Multiplayer VR"],
     category: "vr",
   },
@@ -47,7 +55,7 @@ const gamingEquipment: GamingEquipment[] = [
     id: "4",
     name: "High-End PC Gaming",
     description: "Custom-built gaming PCs with RTX graphics",
-    icon: "💻",
+    icon: Laptop,
     features: [
       "RTX 4080",
       "32GB RAM",
@@ -60,7 +68,7 @@ const gamingEquipment: GamingEquipment[] = [
     id: "5",
     name: "Arcade Classics",
     description: "Retro arcade machines and classic gaming",
-    icon: "🕹️",
+    icon: Joystick,
     features: ["Street Fighter", "Pac-Man", "Donkey Kong", "Pinball"],
     category: "arcade",
   },
@@ -68,7 +76,7 @@ const gamingEquipment: GamingEquipment[] = [
     id: "6",
     name: "Nintendo Switch",
     description: "Portable gaming with family-friendly titles",
-    icon: "🎪",
+    icon: Sparkles,
     features: ["Mario Games", "Zelda Series", "Multiplayer", "Portable Mode"],
     category: "console",
   },
@@ -96,7 +104,9 @@ const GamingEquipmentCard: React.FC<{
     >
       {/* Icon and Title */}
       <div className="text-center mb-4">
-        <div className="text-4xl mb-3">{equipment.icon}</div>
+        <div className="flex justify-center mb-3">
+          <equipment.icon className="w-12 h-12 text-brand-bg" />
+        </div>
         <h3 className="text-xl font-bold text-brand-alt mb-2">
           {equipment.name}
         </h3>

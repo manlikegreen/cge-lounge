@@ -2,12 +2,20 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import {
+  Armchair,
+  Wifi,
+  UtensilsCrossed,
+  Trophy,
+  DoorOpen,
+  BookOpen,
+} from "lucide-react";
 
 interface Amenity {
   id: string;
   title: string;
   description: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
   features: string[];
 }
 
@@ -16,7 +24,7 @@ const amenities: Amenity[] = [
     id: "1",
     title: "Comfortable Gaming Stations",
     description: "Ergonomic seating and spacious gaming areas",
-    icon: "🪑",
+    icon: Armchair,
     features: [
       "Ergonomic Chairs",
       "Adjustable Desks",
@@ -28,7 +36,7 @@ const amenities: Amenity[] = [
     id: "2",
     title: "High-Speed Internet",
     description: "Ultra-fast WiFi for seamless online gaming",
-    icon: "📶",
+    icon: Wifi,
     features: [
       "Fiber Internet",
       "Low Latency",
@@ -40,14 +48,14 @@ const amenities: Amenity[] = [
     id: "3",
     title: "Refreshments & Snacks",
     description: "Gaming fuel to keep you going",
-    icon: "🍕",
+    icon: UtensilsCrossed,
     features: ["Energy Drinks", "Snacks", "Pizza Delivery", "Cold Beverages"],
   },
   {
     id: "4",
     title: "Tournament Area",
     description: "Dedicated space for competitive gaming events",
-    icon: "🏆",
+    icon: Trophy,
     features: [
       "Large Screens",
       "Spectator Seating",
@@ -59,14 +67,14 @@ const amenities: Amenity[] = [
     id: "5",
     title: "Private Gaming Rooms",
     description: "Exclusive spaces for groups and parties",
-    icon: "🚪",
+    icon: DoorOpen,
     features: ["Group Bookings", "Privacy", "Custom Setup", "Party Packages"],
   },
   {
     id: "6",
     title: "Gaming Library",
     description: "Access to hundreds of games across all platforms",
-    icon: "📚",
+    icon: BookOpen,
     features: [
       "Latest Releases",
       "Classic Games",
@@ -89,7 +97,9 @@ const AmenityCard: React.FC<{ amenity: Amenity; index: number }> = ({
     >
       {/* Icon and Title */}
       <div className="text-center mb-4">
-        <div className="text-4xl mb-3">{amenity.icon}</div>
+        <div className="flex justify-center mb-3">
+          <amenity.icon className="w-12 h-12 text-brand-bg" />
+        </div>
         <h3 className="text-xl font-bold text-brand-alt mb-2">
           {amenity.title}
         </h3>

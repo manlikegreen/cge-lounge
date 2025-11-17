@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { Gamepad2, Crosshair, Car, Crown, Zap, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Leaderboards from "../Dashboard/Leaderboards";
 import RankingsTable from "./Rankings";
@@ -9,15 +10,15 @@ import RankingsTable from "./Rankings";
 interface GameCategory {
   id: string;
   name: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
 }
 
 const gameCategories: GameCategory[] = [
-  { id: "all", name: "All Games", icon: "🎮" },
-  { id: "fps", name: "FPS Arena", icon: "🔫" },
-  { id: "racing", name: "Racing", icon: "🏎️" },
-  { id: "strategy", name: "Strategy", icon: "♟️" },
-  { id: "fighting", name: "Fighting", icon: "👊" },
+  { id: "all", name: "All Games", icon: Gamepad2 },
+  { id: "fps", name: "FPS Arena", icon: Crosshair },
+  { id: "racing", name: "Racing", icon: Car },
+  { id: "strategy", name: "Strategy", icon: Crown },
+  { id: "fighting", name: "Fighting", icon: Zap },
 ];
 
 const ESportsLeaderboard: React.FC = () => {
@@ -62,7 +63,7 @@ const ESportsLeaderboard: React.FC = () => {
 
             {/* Last Updated */}
             <div className="flex items-center gap-2 text-gray-400">
-              <span>🕐</span>
+              <Clock className="w-5 h-5" />
               <span>Last Updated: 2 minutes ago</span>
             </div>
           </motion.div>
@@ -74,21 +75,24 @@ const ESportsLeaderboard: React.FC = () => {
             transition={{ delay: 0.4 }}
             className="flex flex-wrap justify-center gap-4 mb-16"
           >
-            {gameCategories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                className={cn(
-                  "flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-300 font-medium",
-                  selectedCategory === category.id
-                    ? "bg-purple-600 border-2 border-brand-alt text-white"
-                    : "bg-gray-800/50 border-2 border-gray-600 text-gray-300 hover:border-brand-alt/50 hover:text-brand-alt"
-                )}
-              >
-                <span className="text-lg">{category.icon}</span>
-                <span>{category.name}</span>
-              </button>
-            ))}
+            {gameCategories.map((category) => {
+              const IconComponent = category.icon;
+              return (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={cn(
+                    "flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-300 font-medium",
+                    selectedCategory === category.id
+                      ? "bg-purple-600 border-2 border-brand-alt text-white"
+                      : "bg-gray-800/50 border-2 border-gray-600 text-gray-300 hover:border-brand-alt/50 hover:text-brand-alt"
+                  )}
+                >
+                  <IconComponent className="w-5 h-5" />
+                  <span>{category.name}</span>
+                </button>
+              );
+            })}
           </motion.div>
         </div>
       </section>
