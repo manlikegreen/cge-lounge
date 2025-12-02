@@ -1,13 +1,18 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import Image, { type StaticImageData } from "next/image";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/UI/Button";
+import { getEvents, Event as BackendEvent } from "@/api/events/get-events";
 
-// Import placeholder images - replace with actual event images
+// Import placeholder images as fallback
 import heroImg from "@/assets/Home/hero.jpg";
 import brandingImg from "@/assets/Home/branding.jpg";
 import productImg from "@/assets/Home/productDesignxManagement.jpg";
+
+const placeholderImages = [heroImg, brandingImg, productImg];
 
 type Event = {
   id: string;
@@ -19,62 +24,62 @@ type Event = {
   buttonLink: string;
 };
 
-const events: Event[] = [
-  {
-    id: "1",
-    imageSrc: heroImg,
-    title: "Console Challenge",
-    description: "Battle royale tournament with $5,000 prize pool",
-    date: "Dec 15, 2025",
-    buttonText: "Watch Live",
-    buttonLink: "#",
-  },
-  {
-    id: "2",
-    imageSrc: brandingImg,
-    title: "FIFA Friday Nights",
-    description: "Weekly soccer gaming tournament for all skill levels",
-    date: "Dec 15, 2025",
-    buttonText: "Register",
-    buttonLink: "#",
-  },
-  {
-    id: "3",
-    imageSrc: productImg,
-    title: "VR Racing League",
-    description: "Virtual reality racing championship series",
-    date: "Dec 15, 2025",
-    buttonText: "Join Weekly",
-    buttonLink: "#",
-  },
-  {
-    id: "4",
-    imageSrc: heroImg,
-    title: "PUBG Club",
-    description: "Battle royale tournament with $5,000 prize pool",
-    date: "Dec 15, 2025",
-    buttonText: "Register",
-    buttonLink: "#",
-  },
-  {
-    id: "5",
-    imageSrc: brandingImg,
-    title: "Guardians night",
-    description: "Weekly soccer gaming tournament for all skill levels",
-    date: "Dec 15, 2025",
-    buttonText: "Register",
-    buttonLink: "#",
-  },
-  {
-    id: "6",
-    imageSrc: productImg,
-    title: "Uncharted 4 game",
-    description: "Virtual reality racing championship series",
-    date: "Dec 15, 2025",
-    buttonText: "Register",
-    buttonLink: "#",
-  },
-];
+// Helper function to calculate status from dates
+const calculateStatus = (
+  startDate: string,
+  endDate: string
+): "live" | "upcoming" | "completed" => {
+  const now = new Date();
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  if (now < start) {
+    return "upcoming";
+  } else if (now >= start && now <= end) {
+    return "live";
+  } else {
+    return "completed";
+  }
+};
+
+// Helper function to format date
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
+
+// Map backend event to frontend event
+const mapBackendEventToFrontend = (
+  backendEvent: BackendEvent,
+  index: number
+): Event => {
+  const status = calculateStatus(backendEvent.startDate, backendEvent.endDate);
+
+  // Use banner if available, otherwise use placeholder images in rotation
+  const imageSrc = backendEvent.banner
+    ? backendEvent.banner
+    : placeholderImages[index % placeholderImages.length];
+
+  // Determine button text based on status
+  const buttonText = status === "live" ? "Watch Live" : "Register";
+
+  // Link to event details page
+  const buttonLink = `/events/${backendEvent.id}`;
+
+  return {
+    id: backendEvent.id.toString(),
+    imageSrc,
+    title: backendEvent.eventName,
+    description: backendEvent.description,
+    date: formatDate(backendEvent.startDate),
+    buttonText,
+    buttonLink,
+  };
+};
 
 interface EventCardProps {
   event: Event;
@@ -101,13 +106,15 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
           <span className="text-sm text-white/60 font-medium">
             {event.date}
           </span>
-          <Button
-            variant="default"
-            size="default"
-            className="bg-brand text-brand-bg hover:bg-brand/90 px-4 py-2 text-sm font-medium"
-          >
-            {event.buttonText}
-          </Button>
+          <Link href={event.buttonLink}>
+            <Button
+              variant="default"
+              size="default"
+              className="bg-brand text-brand-bg hover:bg-brand/90 px-4 py-2 text-sm font-medium"
+            >
+              {event.buttonText}
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
@@ -119,6 +126,43 @@ interface UpcomingEventsProps {
 }
 
 const UpcomingEvents: React.FC<UpcomingEventsProps> = ({ className }) => {
+  const [events, setEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const eventsData = await getEvents();
+
+        // Filter for upcoming/live events first, then map to frontend format
+        const filteredAndMappedEvents = eventsData
+          .filter((backendEvent) => {
+            const status = calculateStatus(
+              backendEvent.startDate,
+              backendEvent.endDate
+            );
+            // Only show upcoming and live events on the home page
+            return status === "upcoming" || status === "live";
+          })
+          .map((backendEvent, index) =>
+            mapBackendEventToFrontend(backendEvent, index)
+          );
+
+        setEvents(filteredAndMappedEvents);
+      } catch (err) {
+        console.error("Failed to fetch events:", err);
+        setError("Failed to load events. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
   return (
     <section className={cn("container py-[5rem]", className)}>
       <div className="mb-12">
@@ -130,11 +174,27 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({ className }) => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {events.map((event) => (
-          <EventCard key={event.id} event={event} />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="text-center py-20">
+          <p className="text-white/60 text-lg">Loading events...</p>
+        </div>
+      ) : error ? (
+        <div className="text-center py-20">
+          <p className="text-red-400 text-lg">{error}</p>
+        </div>
+      ) : events.length === 0 ? (
+        <div className="text-center py-20">
+          <p className="text-white/60 text-lg">
+            No upcoming events at the moment.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {events.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
+        </div>
+      )}
     </section>
   );
 };

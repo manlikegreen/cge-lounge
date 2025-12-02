@@ -134,12 +134,13 @@ export default function Hero({
                   priority={i === index}
                 />
 
-                {/* Overlay content */}
+                {/* Overlay content - only show on larger screens when text is visible */}
                 {(slide.title || slide.description) && (
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="hidden lg:block absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 )}
 
-                <div className="absolute left-6 right-6 bottom-6 md:left-10 md:right-10 md:bottom-10 text-brand-bg">
+                {/* Text content - hidden on mobile and tablet, visible on desktop */}
+                <div className="hidden lg:block absolute left-6 right-6 bottom-6 md:left-10 md:right-10 md:bottom-10 text-brand-bg">
                   {slide.title && (
                     <h2 className="text-6xl font-bold tracking-wide drop-shadow">
                       {slide.title}

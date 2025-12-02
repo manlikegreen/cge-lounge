@@ -20,6 +20,7 @@ interface ProfileSetupProps {
     bio?: string;
     avatarUrl?: string;
     phoneNumber?: string;
+    role?: "user" | "admin" | "moderator";
   } | null;
 }
 
@@ -33,7 +34,7 @@ const ProfileSetup: React.FC<ProfileSetupProps> = ({
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [role] = useState<"user" | "admin" | "moderator">("user"); // Default to "user"
+  const [role, setRole] = useState<"user" | "admin" | "moderator">("user");
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,6 +49,7 @@ const ProfileSetup: React.FC<ProfileSetupProps> = ({
         setBio(initialProfileData.bio || "");
         setPhoneNumber(initialProfileData.phoneNumber || "");
         setAvatarUrl(initialProfileData.avatarUrl || "");
+        setRole(initialProfileData.role || "user");
       } else {
         // Generate random avatar for new profile
         const randomSeed = Math.random().toString(36).substring(7);
@@ -57,6 +59,7 @@ const ProfileSetup: React.FC<ProfileSetupProps> = ({
         setUsername("");
         setBio("");
         setPhoneNumber("");
+        setRole("user");
       }
     } else {
       // Reset form when modal closes
@@ -64,6 +67,7 @@ const ProfileSetup: React.FC<ProfileSetupProps> = ({
       setBio("");
       setPhoneNumber("");
       setAvatarUrl("");
+      setRole("user");
       setError(null);
     }
   }, [isOpen, isEditMode, initialProfileData]);
@@ -124,7 +128,7 @@ const ProfileSetup: React.FC<ProfileSetupProps> = ({
         bio: bio.trim() || "", // Send empty string if bio is not provided
         avatarUrl: avatarUrl,
         phoneNumber: phoneNumber.trim(),
-        role: role, // Defaults to "user"
+        role: role,
       };
 
       // Log token state (but let ApiClient handle token initialization)
@@ -308,6 +312,35 @@ const ProfileSetup: React.FC<ProfileSetupProps> = ({
                   required
                   className="bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-brand-alt"
                 />
+              </div>
+
+              {/* Role */}
+              <div className="md:col-span-2">
+                <Label htmlFor="role" className="text-white mb-2 block">
+                  Role <span className="text-red-400">*</span>
+                </Label>
+                <select
+                  id="role"
+                  value={role}
+                  onChange={(e) =>
+                    setRole(e.target.value as "user" | "admin" | "moderator")
+                  }
+                  className={cn(
+                    "w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white",
+                    "focus:border-brand-alt focus:outline-none focus:ring-2 focus:ring-brand-alt/20",
+                    "cursor-pointer"
+                  )}
+                >
+                  <option value="user" className="bg-gray-800">
+                    User
+                  </option>
+                  <option value="admin" className="bg-gray-800">
+                    Admin
+                  </option>
+                  <option value="moderator" className="bg-gray-800">
+                    Moderator
+                  </option>
+                </select>
               </div>
 
               {/* Bio - Optional */}

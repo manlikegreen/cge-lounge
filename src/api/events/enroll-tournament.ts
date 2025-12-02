@@ -5,6 +5,7 @@ export interface EnrollTournamentRequest {
   email: string;
   phoneNumber: string;
   tournamentId: string;
+  selectedGames: string[]; // Array of game IDs as strings
 }
 
 export interface EnrollTournamentResponse {
@@ -41,6 +42,7 @@ export async function enrollTournament(
       email: enrollmentData.email,
       phoneNumber: enrollmentData.phoneNumber,
       tournamentId: enrollmentData.tournamentId,
+      selectedGames: enrollmentData.selectedGames,
     };
 
     // Make the API request using ApiClient
@@ -54,4 +56,3 @@ export async function enrollTournament(
     throw error;
   }
 }
-

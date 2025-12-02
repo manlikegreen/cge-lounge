@@ -1,20 +1,20 @@
 "use client";
 
 import React, { Suspense } from "react";
-import EventDetails from "@/components/Events/EventDetails";
+import TournamentDetails from "@/components/Events/TournamentDetails";
 
-const EventDetailsPage = () => {
+const TournamentDetailsPage = () => {
   return (
     <Suspense
       fallback={
         <div className="min-h-screen bg-background flex items-center justify-center">
-          <div className="text-white">Loading event details...</div>
+          <div className="text-white">Loading tournament details...</div>
         </div>
       }
     >
-      <EventDetails />
+      <TournamentDetails />
     </Suspense>
   );
 };
 
-export default EventDetailsPage;
+export default TournamentDetailsPage;

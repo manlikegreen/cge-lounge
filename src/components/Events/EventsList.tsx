@@ -15,7 +15,7 @@ interface Event {
   status: "live" | "upcoming" | "completed";
   date: string;
   description: string;
-  gameCategory: "cod" | "fifa" | "vr";
+  gameCategory?: string; // Optional
   buttonText: string;
   buttonVariant: "live" | "register" | "details";
 }
@@ -85,17 +85,19 @@ const EventCard: React.FC<{
             </span>
           </div>
 
-          {/* Image */}
-          <div className="relative w-full h-48 overflow-hidden">
-            <Image
-              src={event.image}
-              alt={event.title}
-              fill
-              className="object-cover group-hover:scale-110 transition-transform duration-300"
-              unoptimized
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-          </div>
+          {/* Image - Only show if image exists */}
+          {event.image && (
+            <div className="relative w-full h-48 overflow-hidden">
+              <Image
+                src={event.image}
+                alt={event.title}
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-300"
+                unoptimized
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            </div>
+          )}
 
           {/* Content */}
           <div className="p-6">

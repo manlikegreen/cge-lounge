@@ -14,9 +14,9 @@ interface Tournament {
   image: string;
   status: "live" | "upcoming" | "completed";
   date: string;
-  prizePool: string;
-  players: string;
-  gameCategory: "cod" | "fifa" | "vr";
+  prizePool?: string; // Optional for now
+  players?: string; // Optional for now
+  gameCategory?: string; // Optional
   buttonText: string;
   buttonVariant: "live" | "register" | "details";
 }
@@ -62,12 +62,12 @@ const TournamentCard: React.FC<{
   const handleButtonClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    router.push(`/events/${tournament.id}`);
+    router.push(`/tournaments/${tournament.id}`);
   };
 
   return (
     <AnimationContainer animation="fadeUp" delay={index * 0.1}>
-      <Link href={`/events/${tournament.id}`}>
+      <Link href={`/tournaments/${tournament.id}`}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -86,17 +86,19 @@ const TournamentCard: React.FC<{
             </span>
           </div>
 
-          {/* Image */}
-          <div className="relative w-full h-48 overflow-hidden">
-            <Image
-              src={tournament.image}
-              alt={tournament.title}
-              fill
-              className="object-cover group-hover:scale-110 transition-transform duration-300"
-              unoptimized
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-          </div>
+          {/* Image - Only show if image exists */}
+          {tournament.image && (
+            <div className="relative w-full h-48 overflow-hidden">
+              <Image
+                src={tournament.image}
+                alt={tournament.title}
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-300"
+                unoptimized
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            </div>
+          )}
 
           {/* Content */}
           <div className="p-6">
@@ -110,14 +112,18 @@ const TournamentCard: React.FC<{
                 <span>📅</span>
                 <span>{tournament.date}</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-300 text-sm">
-                <span>🏆</span>
-                <span>{tournament.prizePool}</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-300 text-sm">
-                <span>👥</span>
-                <span>{tournament.players}</span>
-              </div>
+              {tournament.prizePool && (
+                <div className="flex items-center gap-2 text-gray-300 text-sm">
+                  <span>🏆</span>
+                  <span>{tournament.prizePool}</span>
+                </div>
+              )}
+              {tournament.players && (
+                <div className="flex items-center gap-2 text-gray-300 text-sm">
+                  <span>👥</span>
+                  <span>{tournament.players}</span>
+                </div>
+              )}
             </div>
 
             {/* Action Button */}
