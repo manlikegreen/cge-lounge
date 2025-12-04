@@ -4,7 +4,7 @@ import { FaMapMarkerAlt, FaClock, FaPhone } from "react-icons/fa";
 
 const ContactUs: React.FC = () => {
   return (
-    <section className="bg-brand-secondary py-16">
+    <section id="contact" className="bg-brand-secondary py-16">
       <div className="container grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
         {/* Left Column */}
         <div className="space-y-8">

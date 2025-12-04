@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/UI/Button";
 
@@ -18,7 +19,7 @@ const services: Service[] = [
     description:
       "Step into virtual worlds with our state-of-the-art VR setups. Experience games like never before with immersive 360-degree gameplay.",
     buttonText: "Book Now",
-    buttonLink: "#",
+    buttonLink: "#contact",
   },
   {
     id: "2",
@@ -26,15 +27,15 @@ const services: Service[] = [
     description:
       "Play the latest titles on PS5, Xbox Series X, and Nintendo Switch. Solo adventures or multiplayer battles - your choice.",
     buttonText: "Book Now",
-    buttonLink: "#",
+    buttonLink: "#contact",
   },
   {
     id: "3",
-    title: "Esports Events",
+    title: "Events",
     description:
       "Compete in weekly tournaments, watch live streams, and connect with the gaming community. Prize pools and glory await.",
     buttonText: "Register Now",
-    buttonLink: "#",
+    buttonLink: "/events",
   },
 ];
 
@@ -50,12 +51,14 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
         {service.description}
       </p>
       <div className="mt-auto">
-        <Button
-          variant="ghost"
-          className="bg-brand text-brand-bg hover:bg-brand/90 px-6 py-3 font-medium"
-        >
-          {service.buttonText}
-        </Button>
+        <Link href={service.buttonLink}>
+          <Button
+            variant="ghost"
+            className="bg-brand text-brand-bg hover:bg-brand/90 px-6 py-3 font-medium"
+          >
+            {service.buttonText}
+          </Button>
+        </Link>
       </div>
     </div>
   );

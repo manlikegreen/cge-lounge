@@ -120,15 +120,14 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
                   <Image src={logo} alt="" width={50} height={50} />
                   <div className="flex font-bold uppercase justify-center items-center">
                     <p className="text-2xl flex gap-2 justify-center items-center">
-                      CGE
                       <div className="flex flex-col gap-0.5">
-                        <span className="text-brand-alt text-xs uppercase">
+                        <span className="text-brand-bg text-xs uppercase">
                           CREATIVE
                         </span>
-                        <span className="text-brand-alt text-xs uppercase">
+                        <span className="text-brand-bg text-xs uppercase">
                           GAMING
                         </span>
-                        <span className="text-brand-alt text-xs uppercase">
+                        <span className="text-brand-bg text-xs uppercase">
                           ENTERTAINMENT
                         </span>
                       </div>
@@ -224,7 +223,19 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
                   <div className="flex gap-2">
                     <Image src={logo} alt="" width={50} height={50} />
                     <div className="hidden md:flex font-bold uppercase justify-center items-center">
-                      <p className="text-2xl">CGE Lounge</p>
+                      <p className="text-2xl flex gap-2 justify-center items-center">
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-brand-bg text-xs uppercase">
+                            CREATIVE
+                          </span>
+                          <span className="text-brand-bg text-xs uppercase">
+                            GAMING
+                          </span>
+                          <span className="text-brand-bg text-xs uppercase">
+                            ENTERTAINMENT
+                          </span>
+                        </div>
+                      </p>
                     </div>
                   </div>
                 </Link>

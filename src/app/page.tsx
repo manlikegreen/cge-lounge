@@ -4,7 +4,7 @@ import brandingImg from "@/assets/Home/bookOurFacility.png";
 import productImg from "@/assets/Home/exchangeGames.png";
 import UpcomingEvents from "@/components/Home/UpcomingEvents";
 import Services from "@/components/Home/Services";
-import NewsUpdates from "@/components/Home/NewsUpdates";
+// import NewsUpdates from "@/components/Home/NewsUpdates";
 import ContactUs from "@/components/Home/ContactUs";
 import UpcomingTournaments from "@/components/Home/UpcomingTournaments";
 // import { Button } from "@/components/UI/Button";
@@ -41,7 +41,7 @@ export default function Home() {
       <UpcomingEvents />
       <UpcomingTournaments />
       <Services />
-      <NewsUpdates />
+      {/* <NewsUpdates /> */}
       <ContactUs />
     </>
   );

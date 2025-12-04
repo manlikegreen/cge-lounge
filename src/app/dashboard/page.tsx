@@ -7,7 +7,7 @@ import AdminTournamentSection from "@/components/Dashboard/AdminTournamentSectio
 import Leaderboards from "@/components/Dashboard/Leaderboards";
 import React, { useState, useEffect } from "react";
 import UpcomingEvents from "@/components/Home/UpcomingEvents";
-import NewsUpdates from "@/components/Home/NewsUpdates";
+import UpcomingTournaments from "@/components/Home/UpcomingTournaments";
 import {
   getUserProfile,
   // UserProfileResponse,
@@ -51,7 +51,8 @@ const Dashboard = () => {
       {/* Show AdminTournamentSection for admins, Leaderboards for regular users */}
       {userRole === "admin" ? <AdminTournamentSection /> : <Leaderboards />}
       <UpcomingEvents />
-      <NewsUpdates />
+      <UpcomingTournaments />
+      {/* <NewsUpdates /> */}
     </div>
   );
 };

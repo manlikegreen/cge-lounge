@@ -16,11 +16,10 @@ const Footer: React.FC = () => {
             <div className="flex items-center gap-3 mb-4">
               <Image src={logo} alt="CGE Logo" width={100} height={100} />
               <h3 className="text-2xl flex gap-2 items-center">
-                CGE
                 <div className="flex flex-col">
-                  <span className="text-brand-alt text-sm">CREATIVE</span>
-                  <span className="text-brand-alt text-sm">GAMING</span>
-                  <span className="text-brand-alt text-sm">ENTERTAINMENT</span>
+                  <span className="text-brand-bg text-sm">CREATIVE</span>
+                  <span className="text-brand-bg text-sm">GAMING</span>
+                  <span className="text-brand-bg text-sm">ENTERTAINMENT</span>
                 </div>
               </h3>
             </div>
