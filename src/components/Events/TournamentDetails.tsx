@@ -300,7 +300,8 @@ const TournamentDetails: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <span>🏆</span>
                       <span className="text-xl font-semibold">
-                        ₦{details.totalPrizePool.toLocaleString()} Prize Pool
+                        Up to: ₦{details.totalPrizePool.toLocaleString()} in
+                        prizes to be won.
                       </span>
                     </div>
                   )}

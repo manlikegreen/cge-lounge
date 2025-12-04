@@ -17,6 +17,8 @@ import Contact from "../Icons/Contact";
 import DashboardIcon from "../Icons/DashboardIcon";
 import UserProfile from "../Profile/UserProfile";
 import ApiClient from "@/lib/ApiClient";
+import Image from "next/image";
+import logo from "@/assets/cgeLogo.png";
 
 interface AltNavbarProps {
   children?: ReactNode;
@@ -115,7 +117,7 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
             >
               <Link href="/" className="flex items-center gap-2">
                 <div className="flex gap-2">
-                  {/* <Image src={logo} alt="" width={50} height={50} /> */}
+                  <Image src={logo} alt="" width={50} height={50} />
                   <div className="flex font-bold uppercase justify-center items-center">
                     <p className="text-2xl">CGE Lounge</p>
                   </div>
@@ -207,7 +209,7 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
               <AnimationContainer animation="fadeRight" delay={0.1}>
                 <Link href="/">
                   <div className="flex gap-2">
-                    {/* <Image src={logo} alt="" width={50} height={50} /> */}
+                    <Image src={logo} alt="" width={50} height={50} />
                     <div className="hidden md:flex font-bold uppercase justify-center items-center">
                       <p className="text-2xl">CGE Lounge</p>
                     </div>

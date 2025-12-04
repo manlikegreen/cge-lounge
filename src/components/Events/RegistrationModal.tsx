@@ -353,7 +353,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
       setTimeout(() => {
         setSuccess(false);
         onClose();
-      }, 2000);
+      }, 10000);
     } catch (err) {
       const apiError = err as EventApiError;
       setError(
@@ -606,16 +606,46 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
 
               {/* Success Message */}
               {success && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-4 p-4 bg-green-500/20 border border-green-500 text-green-400 rounded-lg text-center"
-                >
-                  <p className="font-medium">Registration Successful!</p>
-                  <p className="text-sm mt-1">
-                    You have been registered for this event.
-                  </p>
-                </motion.div>
+                <>
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-4 p-4 bg-green-500/20 border border-green-500 text-green-400 rounded-lg text-center"
+                  >
+                    <p className="font-medium">Registration Successful!</p>
+                    <p className="text-sm mt-1">
+                      You have been registered for this event.
+                    </p>
+                  </motion.div>
+
+                  {/* Tournament Banner */}
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="mb-4 p-4 bg-brand-alt/20 border border-brand-alt/50 rounded-lg"
+                  >
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                      <div className="flex-1 text-center sm:text-left">
+                        <p className="font-medium text-brand-alt mb-1">
+                          🏆 Interested in Tournaments?
+                        </p>
+                        <p className="text-sm text-gray-300">
+                          Participate in tournaments and compete for prizes!
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => {
+                          router.push("/events");
+                          onClose();
+                        }}
+                        className="px-6 py-2 bg-brand-alt hover:bg-brand-alt/90 text-white whitespace-nowrap transition-colors"
+                      >
+                        View Tournaments
+                      </Button>
+                    </div>
+                  </motion.div>
+                </>
               )}
 
               {/* Error Message */}
