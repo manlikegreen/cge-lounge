@@ -29,7 +29,8 @@ const ContactUs: React.FC = () => {
               <div>
                 <h3 className="text-white font-bold text-lg mb-1">Location</h3>
                 <p className="text-white/80">
-                  123 Gaming Street, Bonny Island, Nigeria
+                  1 IT WILLIAMS STREET, AKIAMA ROAD, BONNY ISLAND RIVERS STATE,
+                  NIGERIA
                 </p>
               </div>
             </div>
@@ -54,7 +55,8 @@ const ContactUs: React.FC = () => {
               </div>
               <div>
                 <h3 className="text-white font-bold text-lg mb-1">Contact</h3>
-                <p className="text-white/80">+234 123 456 7890</p>
+                <p className="text-white/80">+2348160658509</p>
+                <p className="text-white/80">creativegamingent@gmail.com</p>
               </div>
             </div>
           </div>

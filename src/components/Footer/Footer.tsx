@@ -1,6 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import { FaFacebook, FaInstagram } from "react-icons/fa";
+import logo from "@/assets/cgeLogo.png";
 
 const Footer: React.FC = () => {
   return (
@@ -8,14 +11,44 @@ const Footer: React.FC = () => {
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {/* Company Information */}
-          <div className="lg:col-span-1">
-            <h3 className="text-3xl font-bold text-white uppercase mb-4">
-              CGE
-            </h3>
+
+          <div className="lg:col-span-1 ">
+            <div className="flex items-center gap-3 mb-4">
+              <Image src={logo} alt="CGE Logo" width={100} height={100} />
+              <h3 className="text-2xl flex gap-2 items-center">
+                CGE
+                <div className="flex flex-col">
+                  <span className="text-brand-alt text-sm">CREATIVE</span>
+                  <span className="text-brand-alt text-sm">GAMING</span>
+                  <span className="text-brand-alt text-sm">ENTERTAINMENT</span>
+                </div>
+              </h3>
+            </div>
             <p className="text-white/80 text-sm leading-relaxed">
               The ultimate destination for console gaming, VR experiences, and
               competitive Esports tournaments.
             </p>
+            {/* Social Media Links */}
+            <div className="flex items-center gap-4 mt-6">
+              <a
+                href="https://www.facebook.com/share/1CgoozEdN8/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/80 hover:text-white transition-colors"
+                aria-label="Facebook"
+              >
+                <FaFacebook size={24} />
+              </a>
+              <a
+                href="https://www.instagram.com/cge_lounge"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/80 hover:text-white transition-colors"
+                aria-label="Instagram"
+              >
+                <FaInstagram size={24} />
+              </a>
+            </div>
           </div>
 
           {/* Quick Link Column */}

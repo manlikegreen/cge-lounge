@@ -353,7 +353,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
       setTimeout(() => {
         setSuccess(false);
         onClose();
-      }, 10000);
+      }, 30000);
     } catch (err) {
       const apiError = err as EventApiError;
       setError(
@@ -628,7 +628,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
                       <div className="flex-1 text-center sm:text-left">
                         <p className="font-medium text-brand-alt mb-1">
-                          🏆 Interested in Tournaments?
+                          Want to participate in tournaments?
                         </p>
                         <p className="text-sm text-gray-300">
                           Participate in tournaments and compete for prizes!

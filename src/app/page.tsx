@@ -6,6 +6,7 @@ import UpcomingEvents from "@/components/Home/UpcomingEvents";
 import Services from "@/components/Home/Services";
 import NewsUpdates from "@/components/Home/NewsUpdates";
 import ContactUs from "@/components/Home/ContactUs";
+import UpcomingTournaments from "@/components/Home/UpcomingTournaments";
 // import { Button } from "@/components/UI/Button";
 // import Image from "next/image";
 
@@ -38,6 +39,7 @@ export default function Home() {
         ]}
       />
       <UpcomingEvents />
+      <UpcomingTournaments />
       <Services />
       <NewsUpdates />
       <ContactUs />

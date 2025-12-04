@@ -49,7 +49,7 @@ const ProfileSetup: React.FC<ProfileSetupProps> = ({
         setBio(initialProfileData.bio || "");
         setPhoneNumber(initialProfileData.phoneNumber || "");
         setAvatarUrl(initialProfileData.avatarUrl || "");
-        setRole(initialProfileData.role || "user");
+        setRole("user"); // Always default to "user" role
       } else {
         // Generate random avatar for new profile
         const randomSeed = Math.random().toString(36).substring(7);
@@ -312,35 +312,6 @@ const ProfileSetup: React.FC<ProfileSetupProps> = ({
                   required
                   className="bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-brand-alt"
                 />
-              </div>
-
-              {/* Role */}
-              <div className="md:col-span-2">
-                <Label htmlFor="role" className="text-white mb-2 block">
-                  Role <span className="text-red-400">*</span>
-                </Label>
-                <select
-                  id="role"
-                  value={role}
-                  onChange={(e) =>
-                    setRole(e.target.value as "user" | "admin" | "moderator")
-                  }
-                  className={cn(
-                    "w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white",
-                    "focus:border-brand-alt focus:outline-none focus:ring-2 focus:ring-brand-alt/20",
-                    "cursor-pointer"
-                  )}
-                >
-                  <option value="user" className="bg-gray-800">
-                    User
-                  </option>
-                  <option value="admin" className="bg-gray-800">
-                    Admin
-                  </option>
-                  <option value="moderator" className="bg-gray-800">
-                    Moderator
-                  </option>
-                </select>
               </div>
 
               {/* Bio - Optional */}
