@@ -2,7 +2,7 @@ import Hero from "@/components/Home/Hero";
 import heroImg from "@/assets/Home/levelUp.png";
 import brandingImg from "@/assets/Home/bookOurFacility.png";
 import productImg from "@/assets/Home/exchangeGames.png";
-import UpcomingEvents from "@/components/Home/UpcomingEvents";
+// import UpcomingEvents from "@/components/Home/UpcomingEvents";
 import Services from "@/components/Home/Services";
 // import NewsUpdates from "@/components/Home/NewsUpdates";
 import ContactUs from "@/components/Home/ContactUs";
@@ -38,7 +38,7 @@ export default function Home() {
           },
         ]}
       />
-      <UpcomingEvents />
+      {/* <UpcomingEvents /> */}
       <UpcomingTournaments />
       <Services />
       {/* <NewsUpdates /> */}
