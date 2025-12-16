@@ -4,6 +4,7 @@ import Stats from "@/components/Dashboard/Stats";
 import AdminGameSection from "@/components/Dashboard/AdminGameSection";
 import AdminEventSection from "@/components/Dashboard/AdminEventSection";
 import AdminTournamentSection from "@/components/Dashboard/AdminTournamentSection";
+import TournamentRegistrations from "@/components/Dashboard/TournamentRegistrations";
 import Leaderboards from "@/components/Dashboard/Leaderboards";
 import React, { useState, useEffect } from "react";
 import UpcomingEvents from "@/components/Home/UpcomingEvents";
@@ -50,6 +51,8 @@ const Dashboard = () => {
       {userRole === "admin" && <AdminEventSection />}
       {/* Show AdminTournamentSection for admins, Leaderboards for regular users */}
       {userRole === "admin" ? <AdminTournamentSection /> : <Leaderboards />}
+      {/* Show TournamentRegistrations for admins */}
+      {userRole === "admin" && <TournamentRegistrations />}
       <UpcomingEvents />
       <UpcomingTournaments />
       {/* <NewsUpdates /> */}
