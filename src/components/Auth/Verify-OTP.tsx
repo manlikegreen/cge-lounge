@@ -15,6 +15,8 @@ interface VerifyOTPProps {
   userToken: string;
   userFirstName?: string;
   userLastName?: string;
+  onOTPVerified?: () => void; // Optional callback for password reset flow
+  isPasswordReset?: boolean; // Flag to indicate password reset flow
 }
 
 export default function VerifyOTP({
@@ -24,6 +26,8 @@ export default function VerifyOTP({
   userToken,
   userFirstName,
   userLastName,
+  onOTPVerified,
+  isPasswordReset = false,
 }: VerifyOTPProps) {
   const [otpInputs, setOtpInputs] = useState(["", "", "", ""]);
   const [timeLeft, setTimeLeft] = useState(900); // 15 minutes
@@ -237,7 +241,13 @@ export default function VerifyOTP({
         verifyToken ? "Found" : "NOT FOUND"
       );
 
-      // Show profile setup modal instead of redirecting
+      // Handle password reset flow
+      if (isPasswordReset && onOTPVerified) {
+        onOTPVerified();
+        return;
+      }
+
+      // Show profile setup modal instead of redirecting (for signup flow)
       setShowProfileSetup(true);
       // Don't close OTP modal immediately - let ProfileSetup modal show first
       // The ProfileSetup modal will handle closing when user completes profile
@@ -374,20 +384,22 @@ export default function VerifyOTP({
         </div>
       )}
 
-      {/* Profile Setup Modal */}
-      <ProfileSetup
-        isOpen={showProfileSetup}
-        onClose={() => {
-          setShowProfileSetup(false);
-          onClose(); // Also close the Verify-OTP modal
-        }}
-        userEmail={userEmail}
-        onComplete={() => {
-          setShowProfileSetup(false);
-          onClose(); // Close Verify-OTP modal
-          window.location.href = "/dashboard";
-        }}
-      />
+      {/* Profile Setup Modal - only show for signup flow */}
+      {!isPasswordReset && (
+        <ProfileSetup
+          isOpen={showProfileSetup}
+          onClose={() => {
+            setShowProfileSetup(false);
+            onClose(); // Also close the Verify-OTP modal
+          }}
+          userEmail={userEmail}
+          onComplete={() => {
+            setShowProfileSetup(false);
+            onClose(); // Close Verify-OTP modal
+            window.location.href = "/dashboard";
+          }}
+        />
+      )}
     </div>
   );
 }

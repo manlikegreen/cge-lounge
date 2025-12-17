@@ -21,6 +21,7 @@ import EyeonIcon from "@/components/Icons/EyeonIcon";
 import EyeoffIcon from "@/components/Icons/EyeoffIcon";
 import PadlockIcon from "@/components/Icons/PadlockIcon";
 import { loginUser, ApiError } from "@/api/auth/sign-in";
+import ForgotPasswordModal from "@/components/Auth/ForgotPasswordModal";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -41,6 +42,7 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
   const [saveDetails, setSaveDetails] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -84,6 +86,10 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prev) => !prev);
+  };
+
+  const handleForgotPasswordClick = () => {
+    setShowForgotPasswordModal(true);
   };
 
   return (
@@ -155,6 +161,17 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
           <p className="text-sm text-brand-bg leading-relaxed">Remember me</p>
         </div>
 
+        {/* Forgot Password Link */}
+        <div className="mt-4 text-center">
+          <button
+            type="button"
+            onClick={handleForgotPasswordClick}
+            className="text-brand-alt hover:text-brand-alt/80 transition-colors text-sm"
+          >
+            Forgot Password?
+          </button>
+        </div>
+
         {/* Error Message */}
         {error && (
           <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
@@ -172,6 +189,13 @@ function LoginForm({ onLoginSuccess }: LoginFormProps) {
           </Button>
         </div>
       </form>
+
+      {/* Forgot Password Modal */}
+      <ForgotPasswordModal
+        isOpen={showForgotPasswordModal}
+        onClose={() => setShowForgotPasswordModal(false)}
+        preFilledEmail={form.getValues("email")}
+      />
     </Form>
   );
 }
