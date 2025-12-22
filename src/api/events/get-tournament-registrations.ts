@@ -1,33 +1,27 @@
 import ApiClient from "@/lib/ApiClient";
 
 // Types for tournament registration response
-export interface TournamentRegistrationProfile {
-  id: string;
-  username: string;
-  bio: string;
-  avatarUrl: string;
-  phoneNumber: string;
+export interface TournamentRegistrationGame {
+  tournamentGameId: string;
+  gameTitle: string;
+  prize: string;
+  winnerPrize: string;
 }
 
 export interface TournamentRegistrationTournament {
   id: string;
   title: string;
-  banner: string;
-  requirements: string[];
-  description: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface TournamentRegistration {
   id: string;
   tournament: TournamentRegistrationTournament;
-  profile: TournamentRegistrationProfile;
   fullName: string;
   email: string;
   phoneNumber: string;
-  paidAt: string;
+  paidAt: string | null;
   createdAt: string;
+  games: TournamentRegistrationGame[];
 }
 
 /**

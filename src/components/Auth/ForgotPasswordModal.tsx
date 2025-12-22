@@ -36,12 +36,6 @@ interface ForgotPasswordModalProps {
 
 type Step = "email" | "otp" | "reset";
 
-const emailSchema = z.object({
-  email: z.string().email({
-    message: "Please provide a valid email address",
-  }),
-});
-
 const resetPasswordSchema = z
   .object({
     email: z.string().email({

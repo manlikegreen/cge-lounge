@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { getTournaments, Tournament } from "@/api/events/get-tournaments";
 import {
   getTournamentRegistrations,
   TournamentRegistration,
 } from "@/api/events/get-tournament-registrations";
+import { MdExpandMore, MdExpandLess } from "react-icons/md";
 
 const TournamentRegistrations: React.FC = () => {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
@@ -20,6 +20,30 @@ const TournamentRegistrations: React.FC = () => {
   const [isLoadingTournaments, setIsLoadingTournaments] = useState(true);
   const [isLoadingRegistrations, setIsLoadingRegistrations] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+
+  // Generate initials from full name
+  const getInitials = (fullName: string): string => {
+    if (!fullName) return "??";
+    const names = fullName.trim().split(/\s+/);
+    if (names.length === 1) {
+      return names[0].substring(0, 2).toUpperCase();
+    }
+    return (names[0][0] + names[names.length - 1][0]).toUpperCase();
+  };
+
+  // Toggle row expansion
+  const toggleRow = (registrationId: string) => {
+    setExpandedRows((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(registrationId)) {
+        newSet.delete(registrationId);
+      } else {
+        newSet.add(registrationId);
+      }
+      return newSet;
+    });
+  };
 
   // Fetch tournaments on component mount
   useEffect(() => {
@@ -197,7 +221,7 @@ const TournamentRegistrations: React.FC = () => {
                           User
                         </th>
                         <th className="text-left py-4 px-4 text-sm font-semibold text-gray-400 uppercase">
-                          Contact
+                          Games
                         </th>
                         <th className="text-left py-4 px-4 text-sm font-semibold text-gray-400 uppercase">
                           Payment Status
@@ -208,73 +232,145 @@ const TournamentRegistrations: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {registrations.map((registration, index) => (
-                        <motion.tr
-                          key={registration.id}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.05 }}
-                          className="border-b border-foreground/10 hover:bg-[#0b1018]/50 transition-colors"
-                        >
-                          {/* User Info */}
-                          <td className="py-4 px-4">
-                            <div className="flex items-center gap-3">
-                              <Image
-                                src={registration.profile.avatarUrl}
-                                alt={registration.fullName}
-                                width={40}
-                                height={40}
-                                className="w-10 h-10 rounded-full object-cover"
-                              />
-                              <div>
-                                <p className="text-white font-medium">
-                                  {registration.fullName}
+                      {registrations.map((registration, index) => {
+                        const isExpanded = expandedRows.has(registration.id);
+                        const games = registration.games || [];
+                        const gamesCount = games.length;
+
+                        return (
+                          <React.Fragment key={registration.id}>
+                            <motion.tr
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.05 }}
+                              className="border-b border-foreground/10 hover:bg-[#0b1018]/50 transition-colors cursor-pointer"
+                              onClick={() => toggleRow(registration.id)}
+                            >
+                              {/* User Info */}
+                              <td className="py-4 px-4">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-10 h-10 rounded-full bg-brand-alt/20 flex items-center justify-center text-brand-alt font-bold text-sm">
+                                    {getInitials(registration.fullName || "")}
+                                  </div>
+                                  <div>
+                                    <p className="text-white font-medium">
+                                      {registration.fullName || "N/A"}
+                                    </p>
+                                    <p className="text-gray-400 text-sm">
+                                      {registration.email || "N/A"}
+                                    </p>
+                                    <p className="text-gray-500 text-xs mt-0.5">
+                                      {registration.phoneNumber || "N/A"}
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+
+                              {/* Games Info */}
+                              <td className="py-4 px-4">
+                                <div className="flex items-center gap-2">
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-brand-alt/20 text-brand-alt border border-brand-alt/30">
+                                    {gamesCount}{" "}
+                                    {gamesCount === 1 ? "game" : "games"}
+                                  </span>
+                                  {isExpanded ? (
+                                    <MdExpandLess className="text-gray-400 text-lg" />
+                                  ) : (
+                                    <MdExpandMore className="text-gray-400 text-lg" />
+                                  )}
+                                </div>
+                              </td>
+
+                              {/* Payment Status */}
+                              <td className="py-4 px-4">
+                                {registration.paidAt ? (
+                                  <>
+                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">
+                                      Paid
+                                    </span>
+                                    <p className="text-gray-400 text-xs mt-1">
+                                      {formatDate(registration.paidAt)}
+                                    </p>
+                                  </>
+                                ) : (
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
+                                    Pending
+                                  </span>
+                                )}
+                              </td>
+
+                              {/* Registration Date */}
+                              <td className="py-4 px-4">
+                                <p className="text-gray-300 text-sm">
+                                  {registration.createdAt
+                                    ? formatDate(registration.createdAt)
+                                    : "N/A"}
                                 </p>
-                                <p className="text-gray-400 text-sm">
-                                  @{registration.profile.username}
-                                </p>
-                              </div>
-                            </div>
-                          </td>
+                              </td>
+                            </motion.tr>
 
-                          {/* Contact Info */}
-                          <td className="py-4 px-4">
-                            <div className="space-y-1">
-                              <p className="text-white text-sm">
-                                {registration.email}
-                              </p>
-                              <p className="text-gray-400 text-xs">
-                                {registration.phoneNumber}
-                              </p>
-                            </div>
-                          </td>
-
-                          {/* Payment Status */}
-                          <td className="py-4 px-4">
-                            {registration.paidAt ? (
-                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">
-                                Paid
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
-                                Pending
-                              </span>
-                            )}
-                            {registration.paidAt && (
-                              <p className="text-gray-400 text-xs mt-1">
-                                {formatDate(registration.paidAt)}
-                              </p>
-                            )}
-                          </td>
-
-                          {/* Registration Date */}
-                          <td className="py-4 px-4">
-                            <p className="text-gray-300 text-sm">
-                              {formatDate(registration.createdAt)}
-                            </p>
-                          </td>
-                        </motion.tr>
-                      ))}
+                            {/* Expanded Games Details */}
+                            <AnimatePresence>
+                              {isExpanded && games.length > 0 && (
+                                <motion.tr
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  transition={{ duration: 0.2 }}
+                                  className="border-b border-foreground/10"
+                                >
+                                  <td
+                                    colSpan={4}
+                                    className="py-4 px-4 bg-[#0b1018]/30"
+                                  >
+                                    <div className="space-y-3">
+                                      <p className="text-sm font-semibold text-gray-400 uppercase mb-2">
+                                        Registered Games
+                                      </p>
+                                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                        {games.map((game) => (
+                                          <div
+                                            key={game.tournamentGameId}
+                                            className="bg-[#0b1018] border border-foreground/20 rounded-lg p-4"
+                                          >
+                                            <h4 className="text-white font-medium mb-2">
+                                              {game.gameTitle || "N/A"}
+                                            </h4>
+                                            <div className="space-y-1 text-xs">
+                                              <div className="flex justify-between">
+                                                <span className="text-gray-400">
+                                                  Entry Fee:
+                                                </span>
+                                                <span className="text-brand-alt font-medium">
+                                                  ₦
+                                                  {parseFloat(
+                                                    game.prize || "0"
+                                                  ).toLocaleString()}
+                                                </span>
+                                              </div>
+                                              <div className="flex justify-between">
+                                                <span className="text-gray-400">
+                                                  Winner Prize:
+                                                </span>
+                                                <span className="text-green-400 font-medium">
+                                                  ₦
+                                                  {parseFloat(
+                                                    game.winnerPrize || "0"
+                                                  ).toLocaleString()}
+                                                </span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </td>
+                                </motion.tr>
+                              )}
+                            </AnimatePresence>
+                          </React.Fragment>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>

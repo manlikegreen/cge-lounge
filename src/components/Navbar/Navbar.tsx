@@ -119,7 +119,7 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
                 <div className="flex gap-2">
                   <Image src={logo} alt="" width={50} height={50} />
                   <div className="flex font-bold uppercase justify-center items-center">
-                    <p className="text-2xl flex gap-2 justify-center items-center">
+                    <div className="text-2xl flex gap-2 justify-center items-center">
                       <div className="flex flex-col gap-0.5">
                         <span className="text-brand-bg text-xs uppercase">
                           CREATIVE
@@ -131,7 +131,7 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
                           ENTERTAINMENT
                         </span>
                       </div>
-                    </p>
+                    </div>
                   </div>
                 </div>
               </Link>
@@ -223,7 +223,7 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
                   <div className="flex gap-2">
                     <Image src={logo} alt="" width={50} height={50} />
                     <div className="hidden md:flex font-bold uppercase justify-center items-center">
-                      <p className="text-2xl flex gap-2 justify-center items-center">
+                      <div className="text-2xl flex gap-2 justify-center items-center">
                         <div className="flex flex-col gap-0.5">
                           <span className="text-brand-bg text-xs uppercase">
                             CREATIVE
@@ -235,7 +235,7 @@ const AltNavbar: React.FC<AltNavbarProps> = ({ children }) => {
                             ENTERTAINMENT
                           </span>
                         </div>
-                      </p>
+                      </div>
                     </div>
                   </div>
                 </Link>
