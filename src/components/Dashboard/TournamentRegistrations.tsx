@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getTournaments, Tournament } from "@/api/events/get-tournaments";
 import {
@@ -8,6 +8,8 @@ import {
   TournamentRegistration,
 } from "@/api/events/get-tournament-registrations";
 import { MdExpandMore, MdExpandLess } from "react-icons/md";
+import { Button } from "@/components/UI/Button";
+import ManualTournamentRegistrationModal from "./ManualTournamentRegistrationModal";
 
 const TournamentRegistrations: React.FC = () => {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
@@ -21,6 +23,8 @@ const TournamentRegistrations: React.FC = () => {
   const [isLoadingRegistrations, setIsLoadingRegistrations] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [isManualRegistrationModalOpen, setIsManualRegistrationModalOpen] =
+    useState(false);
 
   // Generate initials from full name
   const getInitials = (fullName: string): string => {
@@ -65,29 +69,35 @@ const TournamentRegistrations: React.FC = () => {
   }, []);
 
   // Fetch registrations when a tournament is selected
-  useEffect(() => {
-    if (selectedTournamentId) {
-      const fetchRegistrations = async () => {
-        try {
-          setIsLoadingRegistrations(true);
-          setError(null);
-          const registrationsData = await getTournamentRegistrations(
-            selectedTournamentId
-          );
-          setRegistrations(registrationsData);
-        } catch (err) {
-          console.error("Failed to fetch registrations:", err);
-          setError("Failed to load registrations. Please try again.");
-        } finally {
-          setIsLoadingRegistrations(false);
-        }
-      };
-
-      fetchRegistrations();
-    } else {
+  const fetchRegistrations = useCallback(async () => {
+    if (!selectedTournamentId) {
       setRegistrations([]);
+      return;
+    }
+
+    try {
+      setIsLoadingRegistrations(true);
+      setError(null);
+      const registrationsData = await getTournamentRegistrations(
+        selectedTournamentId
+      );
+      setRegistrations(registrationsData);
+    } catch (err) {
+      console.error("Failed to fetch registrations:", err);
+      setError("Failed to load registrations. Please try again.");
+    } finally {
+      setIsLoadingRegistrations(false);
     }
   }, [selectedTournamentId]);
+
+  useEffect(() => {
+    fetchRegistrations();
+  }, [fetchRegistrations]);
+
+  // Handle manual registration success
+  const handleManualRegistrationSuccess = useCallback(() => {
+    fetchRegistrations();
+  }, [fetchRegistrations]);
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -109,13 +119,21 @@ const TournamentRegistrations: React.FC = () => {
   return (
     <div className="bg-background p-6 rounded-xl backdrop-blur container mx-auto">
       {/* Header */}
-      <div className="mb-8">
-        <h2 className="text-5xl font-bold text-brand-bg mb-2">
-          Tournament <span className="text-brand-alt">Registrations</span>
-        </h2>
-        <p className="text-gray-400 text-sm">
-          View all users registered for tournaments
-        </p>
+      <div className="mb-8 flex justify-between items-center">
+        <div>
+          <h2 className="text-5xl font-bold text-brand-bg mb-2">
+            Tournament <span className="text-brand-alt">Registrations</span>
+          </h2>
+          <p className="text-gray-400 text-sm">
+            View all users registered for tournaments
+          </p>
+        </div>
+        <Button
+          onClick={() => setIsManualRegistrationModalOpen(true)}
+          className="px-6 py-3"
+        >
+          Register User Manually
+        </Button>
       </div>
 
       {/* Error Message */}
@@ -293,8 +311,8 @@ const TournamentRegistrations: React.FC = () => {
                                     </p>
                                   </>
                                 ) : (
-                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
-                                    Pending
+                                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                                    Manual
                                   </span>
                                 )}
                               </td>
@@ -379,6 +397,13 @@ const TournamentRegistrations: React.FC = () => {
           )}
         </div>
       )}
+
+      {/* Manual Registration Modal */}
+      <ManualTournamentRegistrationModal
+        isOpen={isManualRegistrationModalOpen}
+        onClose={() => setIsManualRegistrationModalOpen(false)}
+        onRegistrationSuccess={handleManualRegistrationSuccess}
+      />
     </div>
   );
 };

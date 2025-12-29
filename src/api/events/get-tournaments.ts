@@ -2,7 +2,9 @@ import ApiClient from "@/lib/ApiClient";
 
 // Types for the tournaments list API
 export interface TournamentGame {
-  id: number;
+  id: number; // Legacy numeric ID (may still exist)
+  gameId?: string; // UUID for game selection (primary)
+  tournamentGameId?: string; // UUID for tournament-game relationship (alternative)
   gameTitle: string;
   description: string;
   requirements: string[];
@@ -25,7 +27,7 @@ export interface TournamentEvent {
 }
 
 export interface Tournament {
-  id: number;
+  id: number | string; // Can be number (legacy) or UUID string
   title: string;
   banner?: string;
   description: string;

@@ -197,7 +197,13 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
     let total = 0;
     participants.forEach((participant) => {
       participant.selectedGames.forEach((gameId) => {
-        const game = games.find((g) => g.id.toString() === gameId);
+        // Try to find game by UUID fields first, then fall back to numeric id
+        const game = games.find(
+          (g) =>
+            g.gameId === gameId ||
+            g.tournamentGameId === gameId ||
+            g.id?.toString() === gameId
+        );
         if (game) {
           const prize =
             typeof game.prize === "string"
@@ -259,6 +265,11 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
     );
   };
 
+  // Get the UUID for a game (prefers UUID fields over numeric id)
+  const getGameUuid = (game: TournamentGame): string => {
+    return game.gameId || game.tournamentGameId || game.id.toString();
+  };
+
   // Validate tournament form
   const validateTournamentForm = (): string | null => {
     if (participants.length === 0) {
@@ -299,8 +310,8 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
           fullName: participant.fullName.trim(),
           email: participant.email.trim(),
           phoneNumber: participant.phoneNumber.trim(),
-          tournamentId: tournamentId!,
-          selectedGames: participant.selectedGames,
+          tournamentId: tournamentId!.toString(), // Ensure it's a string
+          selectedGames: participant.selectedGames, // Already UUIDs
         });
         return { success: true };
       } catch (err) {
@@ -984,13 +995,12 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
                                       typeof game.prize === "string"
                                         ? parseFloat(game.prize)
                                         : game.prize;
+                                    const gameUuid = getGameUuid(game);
                                     const isSelected =
-                                      participant.selectedGames.includes(
-                                        game.id.toString()
-                                      );
+                                      participant.selectedGames.includes(gameUuid);
                                     return (
                                       <label
-                                        key={game.id}
+                                        key={gameUuid}
                                         className={`flex items-start gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg border cursor-pointer transition-colors ${
                                           isSelected
                                             ? "bg-brand-alt/20 border-brand-alt"
@@ -1003,7 +1013,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
                                           onChange={() =>
                                             toggleGameSelection(
                                               participant.id,
-                                              game.id.toString()
+                                              gameUuid
                                             )
                                           }
                                           className="mt-1 w-4 h-4 text-brand-alt border-gray-600 rounded focus:ring-brand-alt flex-shrink-0"
